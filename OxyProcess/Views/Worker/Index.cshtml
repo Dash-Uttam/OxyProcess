@@ -1,0 +1,209 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    <!-- Start Page Content -->
+    <div class="row">
+        <!-- Column -->
+
+        <div class="col-lg-12">
+            <div class="gp-permistion">
+                <a href="@Url.Action("CreateWorker","Worker")" class="btn btn-primary btn-flat">Add Worker</a>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive edit-table m-t-40 group-tabel">
+
+
+                        <table id="myTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>FirstName</th>
+                                    <th>LastName</th>
+                                    <th>UserName</th>
+                                    <th>Is suspended</th>
+                                   
+                                    
+                                    <th>Manage</th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+            <!-- Column -->
+
+        </div>
+
+        <!-- End PAge Content -->
+    </div>
+    <!-- End Container fluid  -->
+    <!-- End footer -->
+</div>
+@section Scripts{
+    <script src="~/js/lib/datatables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetAllWorker", "Worker")",
+                "dataType": "json",
+                success: function (data) {
+                    datatableVariable = $('#myTable').DataTable({
+                         "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                        $('td', nRow).css('background-color', 'white');
+                },
+                        destroy: true,
+                        data: data,
+                        "order": [[5, "desc"]],
+
+                         'columnDefs': [{
+
+
+        'targets': [4], // column index (start from 0)
+        'orderable': false, // set orderable false for selected columns
+                        }, {
+
+                                "targets": [5],
+                                "visible": false,
+                                "searchable": false
+                            },
+
+
+                        ],
+                        columns: [
+                            {
+                                'data': "FirstName",
+                                'render': function (data) {
+
+                                    return "<span class='limittext'>" + data + "</span>"
+
+                                }
+                            },
+                            {
+                                'data': "LastName",
+                                'render': function (data) {
+
+                                    return "<span class='limittext'>" + data + "</span>"
+                                }
+                            },
+                            {
+                                'data': "Email",
+                                'render': function (data) {
+
+                                    return "<span class='limittext'>" + data + "</span>"
+                                }
+                            },
+
+                            {
+                                'data': "Suspended",
+                                "render": simple_checkbox
+                            },
+
+                           
+                            {
+                                'data': "Id",
+                                "render": function (data) {
+                                    return "<a title='Manage Worker' data-toggle='tooltip'   class='tooltip-top fa fa-arrow-right' href='Worker/EditWorkerProfile/" + data + "'></a> ";
+                                }
+                            },
+                            {
+                                'data': "Id",
+
+                            }
+                        ],
+                        //"fnDrawCallback": function () {
+                        //    jQuery('#myTable #kv-toggle-demo').bootstrapToggle();
+                        //}
+                    });
+                }
+            });
+
+        });
+    </script>
+    <script type="text/javascript">
+        var simple_checkbox = function (data, type, full, meta) {
+
+            var is_checked = data == true ? "checked" : "";
+            var id = full['Id'];
+            return '<input type="checkbox" value="' + id + '" class="checkbox disabled"' +
+                is_checked + ' />';
+        }
+
+
+
+
+
+
+
+        //set initial state.
+        $(document).on('change', '.checkbox ', function () {
+            var $this = $(this);
+            var bools = $this.is(':checked');
+            var task = "Suspend";
+            if (bools === false) {
+
+                task = "you sure you want to cancel suspension";
+            }
+            else {
+
+                task = " you want Suspend this worker!";
+            }
+            swal({
+                title: 'Are you sure?',
+                text: task,
+                type: 'warning',
+                showCancelButton: true,
+                 allowOutsideClick: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                closeOnConfirm: false,
+                closeOnCancel: false
+
+            }).then(function (dismiss) {
+                if (dismiss.dismiss === 'cancel') {
+
+                     var bool = $this.is(':checked');
+                    var id = $this.val();
+                    if (bool === true) {
+                        $this.prop('checked', false);
+                    }
+                    else {
+
+                        $this.prop('checked', true);
+                    }
+                } else {
+
+                    var bool = $this.is(':checked');
+                    var id = $this.val();
+                    var dataToSend = {
+                        'Id': id,
+
+                    };
+                    $.ajax({
+                        url: '@Url.Action("ChangeWorkerSuspendedStatus","Worker")',
+                        dataType: 'json',
+                        type: "POST",
+                        data: { user: dataToSend, change: bool },
+                        success: function (result) {
+
+                            if (result === "False") {
+                                alert("Something Worng !");
+                            }
+                        },
+                        error: function (result) {
+                            alert("Failed");
+                        }
+                    });
+                }
+            });
+            });
+
+    </script>
+}
+

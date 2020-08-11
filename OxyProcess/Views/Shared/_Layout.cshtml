@@ -1,0 +1,189 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@using Microsoft.AspNetCore.Rewrite.Internal.UrlActions
+@using Microsoft.AspNetCore.Mvc
+@using System;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
+    <title>OxyProces | @ViewData["Title"]</title>
+
+
+    <environment include="Development">
+        <link href="~/css/lib/bootstrap/bootstrap.min.css" rel="stylesheet">
+        <!-- Custom CSS -->
+        <link href="~/css/helper.css" rel="stylesheet">
+        <link href="~/css/style.css" rel="stylesheet">
+        <link href="~/css/lib/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+        <link href="~/css/lib/chosen/chosen.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/css/lib/bootstrap/bootstrap.min.css" rel="stylesheet">
+        <!-- Custom CSS -->
+        <link href="~/css/helper.css" rel="stylesheet">
+        <link href="~/css/style.css" rel="stylesheet">
+        <link href="~/css/lib/sweetalert/sweetalert2.min.css" rel="stylesheet" />
+        <link href="~/css/lib/chosen/chosen.css" rel="stylesheet" />
+        
+    </environment>
+    @RenderSection("Styles", required: false)
+</head>
+<body class="fix-header fix-sidebar">
+    <div class="preloader">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+        </svg>
+    </div>
+    <!-- Main wrapper  -->
+    <div id="main-wrapper">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        @(await Component.InvokeAsync("HeaderUserDetails"))
+
+                    }
+                    else
+                    {
+                        string authfail = Url.Action("Login", "Account");
+                        Context.Response.Redirect(authfail);
+                    }
+        <!-- End header header -->
+        <!-- Left Sidebar  -->
+        <div class="left-sidebar">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar">
+                <!-- Sidebar navigation-->
+                <ul id="sidebarnav">
+
+                    @*<li class="nav-label">Manu </li>*@
+
+                    <li>
+                        <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30" onclick="window.location = '@Url.Action("Index","Home")';" style="width: 100%;">
+                            Home
+                        </button>
+                    </li>
+                    @if (this.User.IsInRole("Admin"))
+                    {
+                        <li>
+                            <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30" onclick="window.location = '@Url.Action("Index","Template")';" style="width: 100%;">
+                                Form Template
+                            </button>
+                        </li>
+                        <li>
+                            <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30" onclick="window.location = '@Url.Action("Index","FormTag")';" style="width: 100%;">
+                                Tag
+                            </button>
+
+                        </li>
+                        <li>
+                            <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30" onclick="window.location = '@Url.Action("Index","Group")';" style="width: 100%;">
+                                Groups
+                            </button>
+                        </li>
+                        <li>
+                            <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30" onclick="window.location = '@Url.Action("Index","Worker")';" style="width: 100%;">
+                                Workers
+                            </button>
+                        </li>
+
+                        @*<li>
+                            <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30" onclick="window.location = '@Url.Action("Index","AccessRequest")';" style="width: 100%;">
+                                Access Request
+                            </button>
+                        </li>*@
+                    }
+                    else if (this.User.IsInRole("Worker"))
+                    {
+                        <li>
+                            <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30" onclick="window.location = '@Url.Action("Index","FormTag")';" style="width: 100%;">
+                                Tag
+                            </button>
+
+                        </li>
+                        @*<li>
+                <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30" onclick="window.location = '@Url.Action("Index","FormTag")';" style="width: 100%;">
+                    Create Tag
+                </button>
+            </li>*@
+                    }
+
+                    @*<li>
+                        <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30" onclick="window.location = '@Url.Action("PendingRequest","AccessRequest")';" style="width: 100%;">
+                            Pending Request
+                        </button>
+
+                    </li>*@
+                    
+                    <li>
+                        <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30" onclick="window.location = '@Url.Action("Index","UserSetting")';" style="width: 100%;">
+                            Settings
+                        </button>
+                    </li>
+
+                </ul>
+                <!-- End Sidebar navigation -->
+            </div>
+            <!-- End Sidebar scroll-->
+        </div>
+        <!-- End Left Sidebar  -->
+        <!-- Page wrapper  -->
+        <div class="page-wrapper">
+            @RenderBody()            
+        </div>
+        <!-- End Page wrapper  -->
+    </div>
+    <environment include="Development">
+        <script src="~/js/lib/jquery/jquery.min.js"></script>
+        <!-- Bootstrap tether Core JavaScript -->
+        <script src="~/js/lib/bootstrap/js/popper.min.js"></script>
+        <script src="~/js/lib/bootstrap/js/bootstrap.min.js"></script>
+        <!-- slimscrollbar scrollbar JavaScript -->
+        <script src="~/js/jquery.slimscroll.js"></script>
+        <!--Menu sidebar -->
+        <script src="~/js/sidebarmenu.js"></script>
+        <!--stickey kit -->
+        <!--Custom JavaScript -->
+        <script src="~/js/custom.min.js"></script>
+        <script src="~/js/sweetalert2.all.min.js"></script>
+        <script src="~/js/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+        <script src="~/js/lib/chosen/Chosen.js"></script>
+        <script src="~/js/lib/datatables/datatables.min.js"></script>
+        <script type="text/javascript">
+            $('body').tooltip({ selector: '[data-toggle="tooltip"]' });
+            $('.only-number').bind('keyup paste', function () {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        </script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/lib/jquery/jquery.min.js"></script>
+        <!-- Bootstrap tether Core JavaScript -->
+        <script src="~/js/lib/bootstrap/js/popper.min.js"></script>
+        <script src="~/js/lib/bootstrap/js/bootstrap.min.js"></script>
+        <!-- slimscrollbar scrollbar JavaScript -->
+        <script src="~/js/jquery.slimscroll.js"></script>
+        <!--Menu sidebar -->
+        <script src="~/js/sidebarmenu.js"></script>
+        <!--stickey kit -->
+        <!--Custom JavaScript -->
+        <script src="~/js/custom.min.js"></script>
+        <script src="~/js/sweetalert2.all.min.js"></script>
+        <script src="~/js/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+        <script src="~/js/lib/chosen/Chosen.js"></script>
+        <script src="~/js/lib/datatables/datatables.min.js"></script>
+    </environment>
+
+    @RenderSection("Scripts", required: false)
+    
+</body>
+</html>

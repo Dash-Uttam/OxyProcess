@@ -1,0 +1,203 @@
+﻿
+@{
+    ViewData["Title"] = "RegistrationSuccess";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
+    <title>Login</title>
+
+
+    <link href="~/css/lib/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="~/css/helper.css" rel="stylesheet">
+    <link href="~/css/style.css" rel="stylesheet">
+
+    <style type="text/css">
+        .login-form h5 {
+            text-align: center;
+            margin: 63px 0;
+        }
+
+        .login-form h5 {
+            text-align: center;
+            margin: 48px 0 30px;
+        }
+
+        .login-form p i {
+            font-size: 64px;
+            color: green;
+            text-align: center;
+        }
+
+        .login-form p {
+            text-align: center;
+        }
+        .login-form {
+  
+    padding: 30px 5px 20px;
+
+}
+            .login-form  a {
+                display:inline-block !important;
+                color:#fff;
+            }
+            .login-form h4 {
+    
+    line-height: 26px;
+}
+    </style>
+
+
+</head>
+
+
+
+
+
+<body class="fix-header fix-sidebar">
+    <!-- Preloader - style you can find in spinners.css -->
+    <div class="preloader" style="display: none;">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"></circle>
+        </svg>
+    </div>
+
+    <div id="main-wrapper">
+
+        <div class="unix-login" id="first">
+
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-lg-4">
+                        <div class="login-content card">
+                            <div class="login-form">
+                                <h3>Oxyprocess</h3>
+                                <h5>Successfully Register</h5>
+                                <h4 class="thme-head">
+                                    We've sent you a link to confirm your email address.
+                                    please check your inbox.
+                                    it could take up to 10 minutes to show up in your inbox.<br>
+                                </h4>
+                                <div class="register-link m-t-15 text-center">
+
+                                   
+                                    <p>Didn't receive email? Click on resend email.</p>
+                                    <a id="sendmail" href="#" class="btn btn-primary">Resend Email</a> <a href="@Url.Action("Index","UserSetting")" class="btn btn-primary">Back</a>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Button trigger modal -->
+    </div>
+
+
+
+
+
+    <!-- Main wrapper  -->
+    <div class="main-wrapper" id="second" >
+
+        <div class="unix-login">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-lg-4">
+                        <div class="login-content card">
+                            <div class="login-form">
+                                <h3>OXY PROCESS</h3>
+                                <h5>Your Verification link successfully sent.</h5>
+                                <h5>Please check your email to verify your account.</h5>
+                                <p><i class="fa fa-check-circle-o" aria-hidden="true"></i></p>
+                                <div class="text-center">
+                                    <a href="@Url.Action("Login","Account")" class="btn btn-primary">Go to login</a>
+                                </div>
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Button trigger modal -->
+    </div>
+
+
+
+
+
+    <script src="~/js/lib/jquery/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="~/js/lib/bootstrap/js/popper.min.js"></script>
+    <script src="~/js/lib/bootstrap/js/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="~/js/jquery.slimscroll.js"></script>
+    <!--Menu sidebar -->
+    <script src="~/js/sidebarmenu.js"></script>
+    <!--stickey kit -->
+    <script src="~/js/lib/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <!--Custom JavaScript -->
+    <script src="~/js/custom.min.js"></script>
+
+
+    <script>
+
+
+        $("#second").hide();
+         $('#sendmail').on( "click", function() {
+               $(".preloader").show();
+             var model = {
+
+                 'Email':  '@Model.Email',
+                 'Password': '@Model.Password'
+             };
+
+
+
+
+             $.ajax({
+                 type: "Post",
+                 url: "@Url.Action("reconfirmEmail", "Account")",
+                 data:model,
+                 success: function (response) {
+
+                     if (response.success === true) {
+                         $("#first").hide();
+                         $(".preloader").hide();
+                         $("#second").show();
+                     }
+
+                     else {
+
+                          alert("fail");
+                     }
+                    },
+                    error: function () {
+                        alert("Error in Ajax");
+                        location.reload(true);
+                    }
+
+                });
+
+           });
+    </script>
+
+</body>
+
+
+
+</html>
+

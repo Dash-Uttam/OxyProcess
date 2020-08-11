@@ -1,0 +1,938 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
+    <link href="~/css/lib/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="~/css/helper.css" rel="stylesheet">
+    <link href="~/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://harvesthq.github.io/chosen/chosen.css">
+   
+    <style>
+        #myemailform label {
+            font-size: 14px;
+            color: red;
+            font-weight: 400;
+        }
+
+        #emalTaken {
+            color: red;
+        }
+
+        .login-form h4 {
+            color: #455a64;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        #city {
+            width: 300px;
+            padding: 7px;
+            text-align: left;
+        }
+
+        .autocomplete-suggestions {
+            text-align: left;
+            border: 1px solid #999;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+            background: #FFF;
+            overflow: auto;
+        }
+
+        .autocomplete-suggestion {
+            padding: 5px 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .autocomplete-selected {
+            background: #F0F0F0;
+        }
+
+        .autocomplete-suggestions strong {
+            font-weight: normal;
+            color: #3399FF;
+        }
+
+        .autocomplete-group {
+            padding: 2px 5px;
+        }
+
+            .autocomplete-group strong {
+                display: block;
+                border-bottom: 1px solid #000;
+            }
+
+        .chosen-select {
+            width: 300px;
+        }
+
+        .chosen-container {
+            width: 100% !important;
+        }
+
+
+        .chosen-single {
+            line-height: 42px !important;
+            height: 42px !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            border-color: #e7e7e7;
+            font-family: 'Poppins', sans-serif;
+            background: transparent !important;
+            font-size: 16px;
+        }
+
+        .chosen-container-single .chosen-single {
+            border-color: #e7e7e7 !important;
+        }
+
+        input:focus {
+            border-color: #007bff !important;
+            border: 0.1px solid;
+        }
+
+        .chosen-container-single .chosen-single div b {
+            background-position: 0px 10px;
+        }
+
+        .chosen-container-active.chosen-with-drop .chosen-single div b {
+            background-position: -18px 10px;
+        }
+
+        .btn-type {
+            margin-bottom: 0px !important;
+        }
+
+
+
+
+        /*Add Pass hint*/
+
+
+
+
+        /* End Body */
+
+        .tooltip h1 {
+            margin-bottom: 7%;
+        }
+        /*tooltip Box*/
+        .con-tooltip {
+        }
+
+        /*tooltip */
+        .tooltip {
+            visibility: visible;
+            z-index: 1;
+            opacity: .40;
+            width: 357px;
+            padding: 0px 20px;
+            background: #333;
+            color: #E086D3;
+            position: absolute;
+            top: -140%;
+            left: -25%;
+            border-radius: 9px;
+            font: 16px;
+            transform: translateY(9px);
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 0 3px rgba(56, 54, 54, 0.86);
+        }
+
+
+            /* tooltip  after*/
+            .tooltip::after {
+                content: " ";
+                width: 0;
+                height: 0;
+                border-style: solid;
+                border-width: 12px 12.5px 0 12.5px;
+                border-color: #333 transparent transparent transparent;
+                position: absolute;
+                left: 40%;
+            }
+
+        .con-tooltip:hover .tooltip {
+            visibility: visible;
+            transform: translateY(-10px);
+            opacity: 1;
+            transition: .3s linear;
+            animation: odsoky 1s ease-in-out infinite alternate;
+        }
+
+        @@keyframes odsoky {
+            0% {
+                transform: translateY(6px);
+            }
+
+            100% {
+                transform: translateY(1px);
+            }
+        }
+
+        /*hover ToolTip*/
+
+
+
+
+        /*left*/
+
+
+
+
+
+
+
+        /*right*/
+
+
+        .right .tooltip {
+            top: -149%;
+            left: -136%;
+        }
+
+            .right .tooltip::after {
+                top: 40%;
+                left: 102%;
+                transform: rotate(-90deg);
+            }
+
+        .tooltip h3 {
+            background: #333;
+            color: #E086D3;
+            padding: 10px 20px;
+            border-radius: 56px;
+            width: 8em;
+            margin: 20% auto 1% auto;
+        }
+/*
+    dsdasddds
+*/
+
+
+
+
+
+
+
+
+    </style>
+</head>
+
+<body class="fix-header fix-sidebar">
+    <!-- Preloader - style you can find in spinners.css -->
+    <div class="preloader">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+        </svg>
+    </div>
+    <!-- Main wrapper  -->
+    <div id="main-wrapper">
+        <div class="unix-login">
+            <div class="container-fluid">
+                <div class="row justify-content-center register-form" id="userregister">
+                    <div class="col-lg-6">
+                        <div class="login-content card register-wrap">
+                            <div class="login-form">
+                                <h3>OXY PROCESS</h3>
+                                <h4>Register for <span id="usertypenmae"></span></h4>
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <form asp-route-returnUrl="Account/Register" id="myemailform" method="post" autocomplete="off">
+                                    <div class="row">
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <input asp-for="FirstName" type="text" class="form-control" placeholder="First Name">
+                                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <input asp-for="LastName" type="text" class="form-control" placeholder="Last Name">
+                                            <span asp-validation-for="LastName" class="text-danger"></span>
+                                        </div>
+
+
+
+                                        @*<div class="form-group col-sm-6 col-xs-12">
+                                                <input asp-for="Password" type="password" class="form-control" placeholder="Password">
+                                                <span asp-validation-for="Password" class="text-danger"></span>
+                                            </div>*@
+
+
+
+
+
+
+                                        <!-- Right tooltip-->
+
+
+                                        <div class="form-group col-sm-6 col-xs-12 ">
+
+                                            <input asp-for="Password" type="password" class="form-control"  data-toggle="popover" data-placement="left"  title="Popover title" data-content="<ul><li id='letter' class='invalid'>At least <strong>one special character</strong></li>
+                                                        <li id='capital' class='invalid'>At least <strong>one capital letter</strong></li>
+                                                        <li id='number' class='invalid'>At least <strong>one number</strong></li>
+                                                        <li id='length' class='invalid'>Be at least <strong>8 characters</strong></li>
+                                                    </ul>" placeholder="Password">
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+
+                                            @*<div class="tooltip ">
+                                                con-tooltip right
+                                                <p>
+                                                    <h4>Password must meet the following requirements:</h4>
+                                                    <ul>
+                                                        <li id="letter" class="invalid">At least <strong>one special character</strong></li>
+                                                        <li id="capital" class="invalid">At least <strong>one capital letter</strong></li>
+                                                        <li id="number" class="invalid">At least <strong>one number</strong></li>
+                                                        <li id="length" class="invalid">Be at least <strong>8 characters</strong></li>
+                                                    </ul>
+                                                </p>
+                                            </div>*@
+                                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Re-Enter Password">
+                                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <input asp-for="Company" type="text" class="form-control" placeholder="Company">
+                                            <span asp-validation-for="Company" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <select asp-for="IndustryId" data-placeholder="Choose a Industry..." class="chosen-select" id="ddlIndustry"></select>
+                                            <span asp-validation-for="IndustryId" id="errorIndustry" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <input asp-for="NumberOfEmployes" type="number" onkeypress="return isNumberKey(event)" min="1" class="form-control" placeholder="Number Of Employees">
+                                            <span asp-validation-for="NumberOfEmployes" id="errorNumberOfEmployes" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group col-sm-6 col-xs-12">
+
+                                            <input asp-for="Email" type="email" class="form-control" placeholder="Email">
+
+                                            @if (@ViewBag.errmsg != null || @ViewBag.errmsg != "")
+                                            {
+                                                <span asp-validation-for="Email" id="emalTaken" class="taxt-danger">@ViewBag.errmsg</span>
+                                            }
+                                        </div>
+                                        <div class="form-group col-sm-12 col-xs-12">
+                                            <input asp-for="AddressLine1" type="text" class="form-control" placeholder="Enter Address">
+                                            <span asp-validation-for="AddressLine1" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-xs-12">
+                                            <input asp-for="AddressLine2" type="text" class="form-control" placeholder="Enter Second Address ">
+                                            <span asp-validation-for="AddressLine2" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <input asp-for="Phone" type="text" class="form-control" placeholder="Phone">
+                                            <span asp-validation-for="Phone" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <select asp-for="CountryId" data-placeholder="Choose a Country..." class="chosen-select" id="ddlCountry"></select>
+                                            <span asp-validation-for="CountryId" id="errorcountry" class="text-danger"></span>
+
+                                        </div>
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <select asp-for="StateId" class="chosen-select" id="ddlState"><option>Select State</option></select>
+                                            <input asp-for="StateId" type="hidden" id="HiddenStateID">
+                                            <span asp-validation-for="StateId" id="errorState" class="text-danger"></span>
+                                        </div>
+
+
+
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <input asp-for="City" type="text" class="form-control" placeholder="City">
+                                            <span asp-validation-for="City" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group col-sm-6 col-xs-12">
+                                            <input asp-for="ZipCode" type="text" class="form-control" placeholder="ZipCode">
+                                            <span asp-validation-for="ZipCode" class="text-danger"></span>
+                                        </div>
+                                        <input asp-for="UserType" type="hidden" id="UserType" name="UserType" value="">
+
+                                        <div class="form-group col-sm-12 col-xs-12 justify-content-center">
+
+                                            <div class="row justify-content-center">
+                                                <div class="col-4">
+                                                    <button type="button" class="btn btn-primary btn-flat m-b-30 m-t-30" onclick="window.location='@Url.Action("Register","Account")'">Back</button>
+
+                                                </div>
+                                                <div class="col-4">
+                                                    <button type="button" class="btn btn-primary btn-flat m-b-30 m-t-30" id="btn_submit">Sign Up</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="register-link m-t-15 text-center">
+                                            <p>Already have account ? <a asp-action="Login" asp-controller="Account"> Sign in</a></p>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center" id="usertype">
+                    <div class="col-lg-6">
+                        <div class="login-content card register-wrap">
+                            <div class="login-form">
+                                <h3>OXY PROCESS</h3>
+                                <h4>Register</h4>
+                                <form autocomplete="off">
+                                    <div class="row">
+
+                                        <div class="form-group radio-c col-sm-12 text-center col-xs-12">
+                                            <label>What describes you best</label>
+                                            @*<input type="radio" name="radio-cus" value="admin"> <span>Admin</span>
+                                                <input type="radio" name="radio-cus" value="customer"> <span>Customer</span>*@
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input class="custom-control-input" data-val="true" id="admin" name="radio-cus" type="radio" value="admin">
+                                                <label class="custom-control-label" for="admin">Admin</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input class="custom-control-input" id="customer" name="radio-cus" type="radio" value="customer">
+                                                <label class="custom-control-label" for="customer">Customer</label>
+                                            </div>
+                                            <p id="valid-type" class="text-danger"></p>
+                                        </div>
+
+                                        <div class="form-group col-sm-12 col-xs-12">
+                                            <button type="button" class="btn btn-primary btn-flat m-b-30 m-t-30 btn-type" id="onpuse">Continue</button>
+                                        </div>
+
+                                        <div class="register-link m-t-15 text-center">
+                                            <p>Already have account ? <a asp-action="Login" asp-controller="Account" style="cursor: pointer;"> Sign in</a></p>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- End Wrapper -->
+
+    <script src="~/js/lib/jquery/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="~/js/lib/bootstrap/js/popper.min.js"></script>
+    <script src="~/js/lib/bootstrap/js/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="~/js/jquery.slimscroll.js"></script>
+    <!--Menu sidebar -->
+    <script src="~/js/sidebarmenu.js"></script>
+    <!--stickey kit -->
+    <script src="~/js/lib/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <!--Custom JavaScript -->
+    <script src="~/js/custom.min.js"></script>
+    <script src='https://code.jquery.com/ui/1.12.1/jquery-ui.js'></script>
+    <script src='https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js'></script>
+    <script src="https://harvesthq.github.io/chosen/chosen.jquery.js" type="text/javascript"></script>
+    <script src="~/js/lib/input-Mask/inputmask.js"></script>
+
+   
+    <script type="text/javascript">
+        $('#Password').popover({
+            trigger: "hover",
+            html: true
+        })
+
+        $(".chosen-select").chosen();
+
+        $("#Phone").inputmask({ "mask": "(999) 999-9999" });
+
+         $.validator.setDefaults({ ignore: ":hidden:not(select)" });
+    $.validator.addMethod("regxZipcode", function (value, element, regexpr) {
+    return regexpr.test(value);
+    }, "Please enter a valid Zipcode.");
+
+        $.validator.addMethod("regxmobile", function (value, element, regexpr) {
+            var d = parseInt(value.replace(/[^0-9\.]/g, ''), 10);
+
+            return d.toString().length < 10 ? false : true;
+}, "Please enter a valid Phone.");
+        $(function () {
+
+
+
+            $("#myemailform").validate(
+                {
+
+                    onsubmit : false ,//Disables form submit validation
+                    onfocusout: false, //Disables onblur validation.
+                    onkeyup: false,  //Disables onkeyup validation
+                    onclick: false, //Disables onclick validation of checkboxes and radio buttons.
+                    rules:
+                    {
+
+                     Email:
+                        {
+                            required: true,
+                            email: true,
+                            "remote":
+                            {
+                                url: '@Url.Action("EmailCheck","Account")',
+                                type: "GET",
+                                async: false,
+                                data:
+                                {
+                                    email: function () {
+                                        return $('#myemailform :input[name="Email"]').val();
+                                    }
+                                }
+                            }
+                        },
+
+                        FirstName:
+                        {
+                            required: true,
+                            nameRegex: true
+                        },
+                        LastName: {
+                            required: true,
+                            nameRegex: true
+                        },
+                        Password: {
+                            required: true,
+                            passwordRegex: true
+                        },
+                        ConfirmPassword: {
+                            required: true,
+
+                            equalTo: '[name="Password"]'
+                        },
+
+                        Company: {
+                            required: true
+                        },
+
+                        AddressLine1: {
+                            required: true
+                        },
+                        City:{
+                            required: true,
+                             maxlength: 60
+                },
+
+
+                        Phone: {
+                            required: true,
+
+                            regxmobile:10
+
+                        },
+
+                        ZipCode: {
+
+                            required: true,
+                            regxZipcode:/^[0-9]{1,10}$/
+                        },
+
+
+
+                        message:
+                        {
+                            maxlength: 1024
+                        }
+                    },
+                    messages:
+                    {
+
+
+                        FirstName:
+                        {
+                            required: "Please enter firstName",
+                            nameRegex: "Only alphabetical characters into name."
+                        },
+                        LastName:
+                        {
+                            required: "Please enter lastName",
+                            nameRegex: "Only alphabetical characters into name."
+                        },
+                        Password:
+                        {
+                            required: "Please enter password",
+                            passwordRegex: "Password Must be strong Ex.Test@123"
+                        },
+                        ConfirmPassword:
+                        {
+                            required: "Please enter Confirm Password",
+                            equalTo: "Password and confirm password does not match"
+                        },
+                        Email:
+                        {
+                            required: "Please enter your email address.",
+                            email: "Please enter a valid email address.",
+                            remote: jQuery.validator.format("{0} is already taken.")
+                        },
+
+                        Company: {
+
+                              required: "Please enter your Company Name."
+                        },
+                        AddressLine1: {
+
+                              required: "Please enter your Address"
+                        },
+                        City: {
+
+                            required: "Please Enter City",
+                            maxlength:"City Name is too long."
+                        },
+
+                        Phone: {
+                             required: "Please enter your Phone.",
+                            number: "phone number have only numeric values",
+                             regxmobile :"Please enter valid phone number"
+                        },
+
+
+                ZipCode:{
+                    required: "Please enter Area Zip Code.",
+                     number:"Zip Code have only numeric values"
+                },
+                        message:
+                        {
+                            maxlength: jQuery.format("Please limit the message to {0} letters!")
+                        }
+                    }
+                });
+        });
+
+
+
+
+    $('#btn_submit').on("click", function () {
+
+
+               var formisvalid = true;
+        var form = $("#myemailform");
+        form.validate();
+
+
+
+            var country = $("#ddlCountry").chosen().val();
+            var Industry = $("#ddlIndustry").chosen().val();
+
+            var state = $("#ddlState").chosen().val();
+            var NumberOfEmployes =  $("#NumberOfEmployes").val();
+
+        var formvalids = form.valid();
+        if ( formvalids== false) {
+
+            formisvalid = false;
+        }
+
+            if (country === "") {
+
+                $('#errorcountry').text("Please select Country");
+            }
+
+            else {
+
+                $('#errorcountry').text("");
+
+            }
+
+            if (Industry === "") {
+                formisvalid = false;
+                $('#errorIndustry').text("Please select industries Type");
+            }
+            else {
+
+                $('#errorIndustry').text("");
+            }
+
+
+
+            if (state === "") {
+                formisvalid = false;
+
+                $('#errorState').text("Please select State");
+            }
+            else {
+                $('#errorState').text("");
+
+            }
+
+            if (NumberOfEmployes === "") {
+             formisvalid = false;
+            $('#errorNumberOfEmployes').text("Please enter your Number Of Employees.");
+        }
+            else {
+
+                 if($.isNumeric(NumberOfEmployes) ===  false) {
+             formisvalid = false;
+            $('#errorNumberOfEmployes').text("Number Of Employes contains only numbers .");
+        }
+        else {
+                $('#errorNumberOfEmployes').text("");
+
+            }
+
+
+
+            }
+
+
+            if (formisvalid === true) {
+
+
+                $("#myemailform").submit();
+
+        }
+
+
+
+    });
+
+
+
+
+
+function isNumberKey(evt)
+{
+    if (evt.keyCode === 46 || evt.keyCode === 45 || evt.keyCode === 43) {
+        return false;
+    }
+          return true;
+}
+
+
+    $(document).ready(function () {
+            if ($("#UserType").val() === "customer") {
+
+
+                           $("input#NumberOfEmployes").hide();
+                           $("input#NumberOfEmployes").parent().hide();
+
+
+
+        }
+
+
+
+        $.validator.addMethod("passwordRegex", function(value) {
+            return /^[A-Za-z0-9\d=!\-@@$#%^&-()._*]*$/.test(value) // consists of only these
+                && /[a-z]/.test(value) // has a lowercase letter
+                && /[A-Z]/.test(value) // has a lowercase letter
+                && /\d/.test(value) // has a digit
+                && /(?=.*?[#?!@@$%^&*-_()])/.test(value);
+
+});
+
+        //jQuery.validator.addMethod("passwordRegex", function (value, element) {
+
+
+        //    debugger
+    	   //     return this.optional(element) ||  /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@@#\$%\^&\*])(?=.{8,})/i.test(value);
+    	   // }, "Name must contain only letters, number &  space");
+
+             jQuery.validator.addMethod("nameRegex", function(value, element) {
+    	        return this.optional(element) || /^[a-z0-9\ \s]+$/i.test(value);
+    	    }, "Name must contain only letters, number &  space");
+
+
+
+
+
+            $("#onpuse").click(function () {
+                var radioValue = $("input[name='radio-cus']:checked").val();
+
+                if (radioValue) {
+                    $("#UserType").val(radioValue);
+                    $("#usertypenmae").text(radioValue);
+                    $("#valid-type").text("");
+                    $("div#usertype").hide();
+                    $("div#userregister").show();
+
+
+                    if (radioValue == "customer") {
+                           $("#NumberOfEmployes").val('0');
+                           $("input#NumberOfEmployes").hide();
+                           $("input#NumberOfEmployes").parent().hide();
+
+                    }
+                }
+                else {
+
+                    $("#valid-type").text("Please select user type first.");
+                }
+
+
+
+
+            });
+        });
+
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+
+
+                  var ddlIndustry = $('#ddlIndustry');
+            ddlIndustry.append($("<option></option>").val('').html('Please Select industries'));
+            $.ajax({
+                url: '@Url.Action("GetindustryList","Account")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (d) {
+                    $.each(d, function (i, industry) {
+
+
+                         $('#ddlIndustry').append('<option value="'+industry.id+'">' + industry.industrieType + '</option>');
+                    });
+                      $("#ddlIndustry").trigger("chosen:updated");
+                },
+                error: function () {
+                    alert('Error!');
+                }
+            });
+
+
+
+            var ddlCountry = $('#ddlCountry');
+            ddlCountry.append($("<option></option>").val('').html('Please Select Country'));
+            $.ajax({
+                url: '@Url.Action("GetCountryList","Address")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (d) {
+                    $.each(d, function (i, country) {
+
+
+                         $('#ddlCountry').append('<option value="'+country.countryId+'">' + country.countryName + '</option>');
+                    });
+                      $("#ddlCountry").trigger("chosen:updated");
+                },
+                error: function () {
+                    alert('Error!');
+                }
+            });
+
+            //State details by country id
+            $("#ddlCountry").change(function () {
+                var CountryId = parseInt($(this).val());
+                if (!isNaN(CountryId)) {
+                    var ddlState = $('#ddlState');
+                    ddlState.empty();
+                    ddlState.append($("<option></option>").val('').html('Please wait ...'));
+                    $.ajax({
+                        url: '@Url.Action("GetStateList","Address")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { CountryId: CountryId },
+                        success: function (d) {
+                            ddlState.empty(); // Clear the please wait
+                            ddlState.append($("<option></option>").val('').html('Select State'));
+                            $.each(d, function (i, states) {
+                                $('#ddlState').append('<option value="' + states.stateId + '">' + states.stateName + '</option>');
+                            });
+                            $('#ddlState').trigger("chosen:updated");
+                        },
+                        error: function () {
+                            alert('Error!');
+                        }
+                    });
+                }
+
+                else {
+                       var ddlState = $('#ddlState');
+                    ddlState.empty();
+                    ddlState.append($("<option></option>").val('').html('Please wait ...'));
+                      ddlState.empty(); // Clear the please wait
+                    ddlState.append($("<option></option>").val('').html('Select State'));
+                     $('#ddlState').trigger("chosen:updated");
+                }
+
+            });
+
+
+        });
+
+
+
+        @*//Start Loading data for AutoComplete
+
+                $("#city").autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "@Url.Action("CityList", "Address")",
+                            type: "Get",
+                            dataType: "json",
+                            data: { StateId : $("#HiddenStateID").val() },
+                            success: function (data) {
+                                response($.map(data, function (data) {
+                                    return { label: data.cityName, value: data.cityName };
+                                }))
+                            }
+                        })
+                    },
+                    messages: {
+                        noResults: "", results: ""
+                    }
+
+                });
+             //End Loading data for AutoComplete*@
+
+            $('#city').val('');
+
+
+        //validate fileds
+
+
+
+
+    </script>
+
+    @if (ViewData["Error"] != null)
+    {
+        @if (ViewData["Error"].ToString() == "true")
+        {
+            <script>
+            $("div#usertype").hide();
+            $("div#userregister").show();
+             $("#UserType").val('@Model.UserType');
+             $("#usertypenmae").text('@Model.UserType');
+
+            </script>
+
+
+
+        }
+    }
+
+</body>
+</html>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

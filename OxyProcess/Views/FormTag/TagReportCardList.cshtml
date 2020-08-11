@@ -1,0 +1,387 @@
+﻿@model OxyProcess.Models.FormTag.Tag
+@using Newtonsoft.Json;
+
+@{
+    ViewData["Title"] = "TagSearchResult";
+}
+
+<style>
+
+    .c-b ul li a:hover, .c-b ul li.active a {
+        background: #eee;
+        color: #000000;
+    }
+
+    .c-b ul li a {
+        display: block;
+        padding: 10px 12px;
+        background: #fafafa;
+        font-size: 16px;
+        margin: 10px 0 9px;
+        color: #333;
+    }
+
+    .c-b {
+        padding: 20px;
+        border: 1px solid #dee2e6;
+        margin: 0 0 20px;
+    }
+
+    .publicupper {
+        background-color: #ffeef3;
+    }
+
+    .publicOpenFormData .form-group span {
+        display: inline;
+    }
+
+    .detail-user label {
+        width: auto;
+    }
+
+    .c-b.publicupper {
+        position: relative;
+    }
+
+        .c-b.publicupper .i-arrow {
+            z-index: 1;
+            position: absolute;
+            right: 12px;
+            top: 9px;
+            color: #898585;
+            font-size: 26px;
+        }
+
+
+    .c-b ul li a span i {
+        color: #898585;
+    }
+
+    .filenameview {
+        background-color: white;
+        border: 1px solid rgb(var(--GG300-rgb));
+        color: rgb(var(--GB600-rgb));
+        border: none;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        /* line-height: 1.6; */
+        /* min-height: 32px; */
+        padding: 5px 34px 5px 12px;
+        position: relative;
+        transition-duration: 200ms;
+        transition-property: background-color, color, box-shadow, border;
+        transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+        margin: 0 6px 4px;
+    }
+
+    .iconspaceleft {
+        z-index: 0;
+        position: absolute;
+        right: 8px;
+        top: 6px;
+        color: #898585;
+        font-size: 19px;
+    }
+
+    .disable-click {
+        pointer-events: none;
+    }
+</style>
+
+<div class="container-fluid">
+    <!-- Start Page Content -->
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class=" row">
+                        <div class="col-md-12">
+                            <h2 class="heading hd-bar">TAG ID : @Model.TagNumber </h2>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div id="divTagTemplates" class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="c-b publicupper">
+                                <a id="editfirstpublic"> <i class="fa fa-arrow-right i-arrow" aria-hidden="true"></i></a>
+                                <div class="detail-user">
+                                    <form>
+                                        <div class="row publicOpenFormData" id="firstopenformdata">
+
+
+
+                                        </div>
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{ 
+
+<script type="text/javascript">
+
+        $(document).ready(function () {
+        bindTemplateData();
+        $("#editfirstpublic").hide();
+
+
+
+             function RequestAccess(TagDetails) {
+
+            $.ajax({
+                type: "Post",
+                url: "@Url.Action("RequestForGuestAccessTagForm", "FormTag")",
+                dataType: 'json',
+                data: TagDetails,
+                success: function (data) {
+                   
+                    if (data.success == true) {
+
+
+                        swal({
+                            text: 'Read Request Send Successfully.',
+                            type: 'success',
+                            confirmButtonText: 'Ok',
+                        })
+
+
+                    }
+
+                    if (data.success == false) {
+
+
+                        swal({
+                            text: data.msg,
+                            type: 'warning',
+                            confirmButtonText: 'Ok',
+                        })
+
+
+                    }
+
+                },
+
+                 error: function (request, status, error) {
+
+                    var val = request.responseText;
+                    alert("error" + val);
+                }
+            });
+                 $(".TemplateTag").removeClass("disable-click");
+                 $(".TemplateTag > span > i").removeClass('fa fa-spinner fa-spin').addClass('fa fa-arrow-right');
+
+        }
+
+
+
+
+
+            $(document).on('click', ".TemplateTag", function (event) {
+                $(".TemplateTag").addClass("disable-click");
+                $(".TemplateTag > span > i").removeClass('fa fa-arrow-right').addClass('fa fa-spinner fa-spin');
+              
+                var tagid = '@Model.TagNumber';
+                var tempuniqid = this.id;
+
+                $.ajax({
+                    type: "Get",
+                    url: "@Url.Action("HasPermission", "FormTag")",
+                    dataType: 'json',
+                    data: { TagId: tagid ,TagUnqId: tempuniqid},
+                    success: function (data) {
+                       
+                        if (data.writePermission == true) {
+                            $(".TemplateTag").removeClass("disable-click");
+                            $(".TemplateTag > span > i").removeClass('fa fa-spinner fa-spin').addClass('fa fa-arrow-right');
+                            window.location.replace("FillFormData?TemplateUniqueId=" + tempuniqid + "&returnSearchTag=" + '@Model.TagNumber' + "&DataEntryID=" + '@Model.Id');
+                        }
+                        else {
+                            $(".TemplateTag").removeClass("disable-click");
+                            $(".TemplateTag > span > i").removeClass('fa fa-spinner fa-spin').addClass('fa fa-arrow-right');
+                                  swal({
+                                    title: "unauthorized access",
+                                    text: "You have no permission to View this Form!",
+                                    type: "error",
+                                    showCancelButton: true,
+                                    confirmButtonClass: "btn-danger",
+                                    confirmButtonText: "Request for Permission",
+                                    cancelButtonText: "cancel",
+                                    closeOnConfirm: false,
+                                    allowOutsideClick: false,
+                                    closeOnCancel: false
+
+                                }).then(function (dismiss) {
+                                    if (dismiss.dismiss === 'cancel') {
+                                        $(".TemplateTag").removeClass("disable-click");
+                                        $(".TemplateTag > span > i").removeClass('fa fa-spinner fa-spin').addClass('fa fa-arrow-right');
+                                    } else {
+                                                    var TagDetails = {
+                                                        TagId :'@Model.Id',
+                                                        Unique_Template_Id: tempuniqid
+                                                    }
+                                                    RequestAccess(TagDetails);
+                                    }
+
+                                });
+
+                        }
+
+                    }
+                    });
+
+           
+            })
+        });
+
+
+        function bindTemplateData() {
+             var data = {
+                'Id': '@Model.Id'
+            };
+            $.ajax({
+                type: "Post",
+                url: "@Url.Action("GetSearchTagFormData","FormTag")",
+                dataType: 'json',
+                data: data,
+                success: function (data) {
+                    if (data.tagCode == "") {
+                        $(".publicupper").hide();
+                            swal("No form found inside tag.")
+                            .then((value) => {
+                                window.location.replace('@Url.Action("Index","Home")')
+                             });
+                        return false;
+                    }
+                    var obj = JSON.parse(data.tagCode);
+                          $(obj[0]).each(function (index) {
+                        var gdata = "";
+                        if (this.type === "Group") {
+                            var groupInfo = obj[0][index];
+                            var ulData = '<ul> <li class="active"><h4>'+groupInfo.name+'</h4>';
+                            $(obj[0][index].children[0]).each(function (index2) {
+                                if (obj[0][index].children[0][index2].group === 0) {
+                                    var uniqeid = obj[0][index].children[0][index2].uniqid;
+                                    var Namegroupchild = obj[0][index].children[0][index2].name;
+                                    var SecondName = obj[0][index].children[0][index2].secondname;
+                                    if ($.trim(SecondName) !== $.trim(Namegroupchild))  {
+                                       Namegroupchild = SecondName ;
+                                    }
+                                    gdata += ('<li class="active"><a href="#" class="TemplateTag" id="'+uniqeid+'" ><span> ' + Namegroupchild + ' <i class="fa fa-arrow-right TemplateTag" aria-hidden="true"></i></span></a> </li>');
+                                }
+                                else {
+
+                                    var Namegroupchild = obj[0][index].children[0][index2].name;
+                                    var SecondName = obj[0][index].children[0][index2].secondname;
+                                    var uniqeid = obj[0][index].children[0][index2].uniqid;
+                                    if ($.trim(SecondName) !== $.trim(Namegroupchild)) {
+                                       Namegroupchild = SecondName ;
+                                    }
+                                    gdata += ('<li class="active"><a href="#" class="TemplateTag" id="'+uniqeid+'"><span> '+ Namegroupchild +' <i class="fa fa-arrow-right" aria-hidden="true"></i></span></a> </li>');
+                                }
+                            })
+                            ulData += gdata + '</li></ul>';
+                            $("#divTagTemplates").append('<div class="c-b">' + ulData + '</div>');
+                        }
+                        else {
+                            if (obj[0][index].group === 0) {
+                                if (index != 0) {
+                                    var Namegroupchild = obj[0][index].name;
+                                    var SecondName = obj[0][index].secondname;
+                                    var uniqeid = obj[0][index].uniqid;
+                                    if ($.trim(SecondName) !== $.trim(Namegroupchild)) {
+                                        Namegroupchild = SecondName;
+                                    }
+                                    var idgroupchild = obj[0][index].id;
+                                    $('#divTagTemplates').append('<div class="c-b"><ul><li class="active"> <a href="#" class="TemplateTag" id="' + uniqeid + '"><span> ' + Namegroupchild + ' <i class="fa fa-arrow-right" aria-hidden="true"></i></span></a> </li></li></ul></div>');
+
+                                }
+                                else {
+
+
+                                        //get first public card with value and key to show first pink section
+                                            var data =  {
+                                                          "TemplateUniqueId" : obj[0][index].uniqid
+                                                    }
+
+
+                                                        $.ajax({
+                                                            type: "Get",
+                                                            url: "@Url.Action("GetSingleFormData","FormTag")",
+                                                            dataType: 'json',
+                                                            data: data,
+                                                            success: function (data) {
+                                                                debugger
+                                                                if (data.permission == true) {
+                                                                    $("#editfirstpublic").show();
+                                                                    $("#editfirstpublic").attr("href",'@Url.Action("FillFormData","FormTag")?TemplateUniqueId='+obj[0][index].uniqid+'&returnSearchTag='+'@Model.TagNumber'+"&DataEntryID="+'@Model.Id')
+
+                                                                }
+
+
+                                                                $(data.returndata).each(function (index) {
+
+
+                                                                    if (data.returndata[index].type == "file") {
+
+                                                                        //var valueslist = data[index].latestValue;
+                                                                        //var newvaluelist = "";
+                                                                        var setnewvalue = "";
+
+                                                                        //valueslist = valueslist.split(',');
+
+
+                                                                        $(data.returndata[index].files).each(function (index2) {
+
+
+                                                                                newvaluelist = data.returndata[index].files[index2].name.split('@@')[1];
+                                                                                setnewvalue = setnewvalue + '<span class="filenameview">' + newvaluelist +  ' <a href="@Url.Action("downloadFile","FormTag")?FileId=' + data.returndata[index].files[index2].id + '" download><i class="fa fa-download iconspaceleft FirstEdit" aria-hidden="true"></i></a></span>';
+
+                                                                        });
+
+
+                                                                        $('#firstopenformdata').append('<div class="form-group  col-md-6 col-sm-12 col-xs-12" ><label>' + data.returndata[index].label + ' : </label> ' + (setnewvalue == "" ? 'No data.' :setnewvalue) + '</div>');
+
+
+
+
+                                                                    }
+                                                                    else {
+                                                                        if (data.returndata[index].type != "header") {
+                                                                            $('#firstopenformdata').append('<div class="form-group  col-md-6 col-sm-12 col-xs-12" ><label>' + data.returndata[index].label + ' : </label> <span> ' + (data.returndata[index].value == "" ? 'No data.' : data.returndata[index].value) + '</span></div>');
+
+                                                                        }
+                                                                       // $('#firstopenformdata').append('<div class="form-group  col-md-6 col-sm-12 col-xs-12" ><label>' + data[index].label + ' : </label> <span> ' + (data[index].latestValue == null ? 'No data.' :data[index].latestValue)  + '</span></div>');
+                                                                    }
+                                                                })
+
+                                                            }
+                                                        })
+
+                                }
+                                                    }
+                                else {
+                                    var Namegroupchild = obj[0][index].name;
+                                    var SecondName = obj[0][index].secondname;
+                                    var uniqeid = obj[0][index].uniqid;
+                                       if ($.trim(SecondName) !== $.trim(Namegroupchild))  {
+                                        Namegroupchild = SecondName;
+                                    }
+                                 $('#divTagTemplates').append('<div class="c-b"><ul><li class="active"> <a href="#" class="TemplateTag" id="'+uniqeid+'"><span> ' +Namegroupchild+' <i class="fa fa-arrow-right" aria-hidden="true"></i></span></a> </li></li></ul></div>');
+                                }
+                              }
+                    });
+                }
+            });
+        }
+</script>
+}

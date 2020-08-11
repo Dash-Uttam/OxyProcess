@@ -1,0 +1,582 @@
+﻿
+@{
+    ViewData["Title"] = "EditProfile";
+}
+
+@model UserProfileViewModel
+@{
+    ViewData["Title"] = "UserSettings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles{
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+
+        .editable-clear-x {
+            position: absolute !important;
+        }
+
+        .editable-submit, .editable-cancel {
+            width: 50px !important;
+            margin: 0px 0px 0 8px !important;
+        }
+
+        .editable-click, a.editable-click, a.editable-click:hover {
+            text-decoration: none;
+            border-bottom: none 1px #0088cc;
+        }
+
+        .company-detail label {
+            display: block;
+        }
+
+        .company-detail span {
+            position: relative;
+            display: block;
+        }
+
+        .modal-body select {
+            height: 33px !important;
+        }
+
+
+        .autocomplete-suggestions {
+            text-align: left;
+            border: 1px solid #999;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+            background: #FFF;
+            overflow: auto;
+        }
+
+        .autocomplete-suggestion {
+            padding: 5px 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .autocomplete-selected {
+            background: #F0F0F0;
+        }
+
+        .autocomplete-suggestions strong {
+            font-weight: normal;
+            color: #3399FF;
+        }
+
+        .autocomplete-group {
+            padding: 2px 5px;
+        }
+
+            .autocomplete-group strong {
+                display: block;
+                border-bottom: 1px solid #000;
+            }
+
+        #myModal .modal-dialog {
+            position: unset;
+            margin: 7.75rem auto;
+        }
+
+        .editable-error-block {
+            margin: 5px 0px 0px 11px;
+        }
+
+        .editable-error-block {
+            width: 100%;
+            margin: 0;
+        }
+    </style>
+
+}
+
+<div class="container-fluid justify-content-center">
+    <!-- Start Page Content -->
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-6  class-ad">
+            <div class="detail-user">
+                <div class="card">
+                    <div class="card-body">
+                        <div class=" row">
+                            <div class="col-md-12">
+                                <h2 class="heading">Worker Profile</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <form>
+                                    <div class="row">
+                                        <div class="form-group  col-md-12 col-sm-12 col-xs-12">
+                                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        </div>
+                                        <div class="form-group  col-md-12 col-sm-12 col-xs-12">
+                                            <label>FirstName </label>
+                                            <span id="firstname" data-pk="@ViewBag.userid">  <a title="" data-original-title="" class="editable editable-click" href="#" data-type="text" data-placement="right" data-title="Enter LastName">@Model.FirstName</a><span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+
+                                        </div>
+                                        <div class="form-group  col-md-12 col-sm-12 col-xs-12">
+                                            <label>LastName </label>
+                                            <span id="lastname" data-pk="@ViewBag.userid">  <a title="" data-original-title="" class="editable editable-click" href="#" data-type="text" data-placement="right" data-title="Enter LastName">@Model.LastName</a><span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+
+                                        </div>
+
+                                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                            <label>Email</label>
+                                            @*<span>@Model.Phone<span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>*@
+
+                                            <span id="Email" data-pk="@ViewBag.userid">  <a title="" data-original-title="" class="editable editable-click" href="#" data-type="text" data-placement="right" data-title="Enter Email">@Model.Email</a><span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+
+                                        </div>
+
+                                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                            <label>Phone </label>
+                                            @*<span>@Model.Phone<span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>*@
+
+                                            <span id="Phone" data-pk="@ViewBag.userid">  <a title="" data-original-title="" class="editable editable-click" href="#" data-type="text" data-placement="right" data-title="Enter Phone">@Model.Phone</a><span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+
+                                        </div>
+
+                                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                            <label>Password</label>
+                                            <span id="Password" data-pk="@ViewBag.userid">  <a title="" data-original-title="" class="editable editable-click" href="#" data-type="text" data-placement="right" data-title="Enter Password"></a><span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+                                        </div>
+
+                                        <div class="form-group col-sm-12 col-xs-12" style="text-align: right;">
+                                            <a class="btn btn-profile btn-primary btn-flat m-b-30 m-t-30 " asp-action="Index" asp-controller="Worker">Back</a>
+                                        </div>
+
+
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- Column -->
+
+    </div>
+</div>
+
+
+@section Scripts{
+    <!-- Scripts -->
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js'></script>
+
+    <script src="~/js/JqueryUI_1_11_2.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+
+            if ($(location).attr('hash') == "#company") {
+
+                $('.company-detail').css({ "visibility": "visible" });
+                $(".detail-user").hide();
+            }
+            else {
+                $(".detail-user").show();
+            }
+            $(window).on('popstate', function (event) {
+                   if ($(location).attr('hash') == "#company") {
+                       window.location.href.split('#')[0]
+                       location.reload();
+                   } else {
+                       $(".detail-user").show();
+                       $('.company-detail').hide()
+                   }
+                    $(".detail-user").show();
+                    $('.company-detail').hide();
+            });
+            /* DEMO SCRIPTS */
+            $.fn.editable.defaults.mode = 'inline';
+            $('#EditCompany').click(function ()
+            {
+                 $('.company-detail').css({ "visibility": "visible" });
+                 $(".detail-user").hide();
+            });
+
+            $('#firstname').editable({
+
+                validate: function (value) {
+                    if (value === null || value === '') {
+                        return 'Empty values not allowed';
+                    }
+
+                    if (value.length > 30) {
+                        return 'First Name is too Long.';
+                    }
+                },
+                url: function (collection) {
+                    var j = $(this).attr('data-pk');
+                    collection.pk = j;
+                    return $.ajax({
+                        url: '@Url.Action("EditUserProfile", "Worker")',
+                        type: "POST",
+
+                        data: { "collection": collection  },
+                        dataType: 'json',
+
+                        success: function (response) {
+                            location.reload(true);
+                        },
+                        error: function () {
+                            alert("Error in Ajax");
+                        }
+                    });
+                }
+            });
+
+            $('#lastname').editable({
+                validate: function (value) {
+                    if (value === null || value === '') {
+                        return 'Empty values not allowed';
+                    }
+
+                    if (value.length > 30) {
+                        return 'Last Name is too Long.';
+                    }
+                },
+                url: function (collection) {
+                      var j = $(this).attr('data-pk');
+                    collection.pk = j;
+                    return $.ajax({
+                        url: '@Url.Action("EditUserProfile", "Worker")',
+                        type: "POST",
+
+                        data: { "collection": collection  },
+                        dataType: 'json',
+
+                        success: function (response) {
+                            location.reload(true);
+                        },
+                        error: function () {
+                            alert("Error in Ajax");
+                        }
+                    });
+                },
+
+            });
+
+            $('#Phone').editable({
+                validate: function (value) {
+                    if (value === null || value === '') {
+                        return 'Empty values not allowed';
+                    }
+                         var regex = /^[0-9]+$/;
+                        if (!regex.test(value)) {
+                            return 'numbers only!';
+                        }
+
+                },
+                url: function (collection) {
+                      var j = $(this).attr('data-pk');
+                    collection.pk = j;
+                    return $.ajax({
+                        url: '@Url.Action("EditUserProfile", "Worker")',
+                        type: "POST",
+
+                        data:{ "collection": collection },
+                        dataType: 'json',
+
+                        success: function (response) {
+                            location.reload(true);
+                        },
+                        error: function () {
+                            alert("Error in Ajax");
+                        }
+                    });
+                },
+
+            });
+
+
+            $('#Password').editable({
+                validate: function (value) {
+                    //if (value === null || value === '') {
+                    //    return 'Empty values not allowed';
+                    //}
+                    //     var regex = /^[0-9]+$/;
+                    //    if (!regex.test(value)) {
+                    //        return 'numbers only!';
+                    //    }
+                    if (!passwordRegex(value)) {
+
+                        return 'Enter Valid Password Ex."Passw@001"';
+                    }
+
+                },
+                url: function (collection) {
+                      var j = $(this).attr('data-pk');
+                    collection.pk = j;
+                    return $.ajax({
+                        url: '@Url.Action("EditUserProfile", "Worker")',
+                        type: "POST",
+
+                        data:{ "collection": collection },
+                        dataType: 'json',
+
+                        success: function (response) {
+                            location.reload(true);
+                        },
+                        error: function () {
+                            alert("Error in Ajax");
+                        }
+                    });
+                },
+
+            });
+
+            
+
+            $('#Email').editable({
+                validate: function (value) {
+
+
+                    if (value === null || value === '') {
+                        return 'Empty values not allowed';
+                    }
+
+                    var regex = /^([a-zA-Z0-9_\-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+                    if (!regex.test(value)) {
+                        return 'please enter valid email!';
+                    }
+
+
+
+                },
+                url: function (collection) {
+
+
+
+
+
+
+                        var j = $(this).attr('data-pk');
+                        collection.pk = j;
+                        return $.ajax({
+                            url: '@Url.Action("EditUserProfile", "Worker")',
+                            type: "POST",
+
+                            data: { "collection": collection },
+                            dataType: 'json',
+
+                            success: function (response) {
+
+                                if (response.message == "Exist" && response.success == false) {
+                                    swal({
+                                        title: 'Please Check Email Address',
+                                        text: 'Email id is already registered',
+                                        type: 'warning',
+                                        showCancelButton: false,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Ok',
+                                        closeOnConfirm: false,
+                                        closeOnCancel: false
+
+                                    }).then(function (dismiss) {
+
+                                        location.reload(true);
+
+                                    });
+                                } else {
+                                     location.reload(true);
+
+                                }
+                            },
+                            error: function () {
+                                alert("Error in Ajax");
+                            }
+                        });
+
+
+
+                }
+            });
+
+
+
+            function passwordRegex(value) {
+                return /^[A-Za-z0-9\d=!\-@@$#%^&-()._*]*$/.test(value) // consists of only these
+                    && /[a-z]/.test(value) // has a lowercase letter
+                    && /[A-Z]/.test(value) // has a lowercase letter
+                    && /\d/.test(value) // has a digit
+                    && /(?=.*?[#?!@@$%^&*-_()])/.test(value);
+
+            };
+
+
+            $('#CountryId').change(function () {
+
+                var CountryId = parseInt($(this).val());
+                    if (!isNaN(CountryId)) {
+                        var ddlState = $('#StateId');
+                        var ddlCity = $('#CityId');
+                        ddlState.empty();
+                        ddlCity.empty();
+                        ddlState.append($("<option></option>").val('').html('Please wait ...'));
+                        ddlCity.append($("<option></option>").val('').html('Please wait ...'));
+                    $.ajax({
+                        url: '@Url.Action("GetStateList","Address")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { CountryId: CountryId },
+                        success: function (d) {
+                            ddlState.empty(); // Clear the please wait
+                            ddlState.append($("<option></option>").val('').html('Select State'));
+                            ddlCity.empty(); // Clear the please wait
+                            ddlCity.append($("<option></option>").val('').html('Select City'));
+                            $.each(d, function (i, states) {
+                                ddlState.append($("<option></option>").val(states.stateId).html(states.stateName));
+                            });
+                        },
+                        error: function () {
+                            alert('Error!');
+                        }
+                    });
+                }
+            });
+
+
+            //City Bind By state id
+            $("#StateId").change(function () {
+                var StateId = parseInt($(this).val());
+                    if (!isNaN(StateId)) {
+                        var ddlCity = $('#CityId');
+                    ddlCity.append($("<option></option>").val('').html('Please wait ...'));
+                    $.ajax({
+                        url: '@Url.Action("GetCityList","Address")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { stateId: StateId },
+                        success: function (d) {
+                            ddlCity.empty(); // Clear the plese wait
+                            ddlCity.append($("<option></option>").val('').html('Select City'));
+                            $.each(d, function (i, cities) {
+                                ddlCity.append($("<option></option>").val(cities.cityId).html(cities.cityName));
+                            });
+                        },
+                        error: function () {
+                            ddlState.empty(); // Clear the please wait
+                            ddlState.append($("<option></option>").val('').html('Select State'));
+                        }
+                    });
+                }
+
+            });
+
+            $('#updateCST').on("click", function () {
+
+                if (isselectall()) {
+                    var cst = new Object();
+                    cst.CountryId = ($("select#CountryId").val() !== "") ? $("select#CountryId").val() : 0
+                    cst.StateId = ($("select#StateId").val() !== "") ? $("select#StateId").val() : 0
+                    cst.CityId = ($("select#CityId").val() !== "") ? $("select#CityId").val() : 0
+                    $.ajax({
+                        url: '@Url.Action("updateCST", "UserSetting")',
+                        type: "POST",
+                        data: cst,
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.success == true) {
+                                if (response.cscUpdate == true) {
+                                    swal({
+                                        text: response.message,
+                                        type: 'success',
+                                        confirmButtonText: 'Ok',
+                                    }).then(function () {
+                                        location.reload(true);
+                                        });
+                                    $("#myModal").modal('hide');
+                                }
+                                if (response.sscRequired == true) {
+                                    swal({
+                                        text: response.message,
+                                        type: 'error',
+                                        confirmButtonText: 'Ok',
+                                    }).then(function () {
+                                        location.reload(true);
+                                        });
+                                    $("#myModal").modal('hide');
+
+                                }
+
+                            } else {
+                                swal({
+                                    text: response.message,
+                                    type: 'error',
+                                    confirmButtonText: 'Ok',
+                                }).then(function () {
+                                    location.reload(true);
+                                });
+                            }
+                        },
+                        error: function () {
+                            alert("Error in Ajax");
+                        }
+                    });
+
+                }
+
+
+
+
+            });
+
+
+
+        });
+
+        function isselectall() {
+            if ($("select#CountryId").val() != "" && $("select#StateId").val() != "" && $("select#CityId").val() != ""  ) {
+                return true
+            }
+            else {
+                return false
+            }
+        }
+
+
+        $('#errorState').html('');
+        $('#errorCity').html('');
+
+        function isselectall() {
+            var count = 0;
+            $('#errorState').html('');
+            $('#errorCity').html('');
+            $('#MemberName-error').html('');
+            if ($("select#StateId").val() === "") {
+                $('#errorState').html('Please select state');
+                count = count + 1;
+                return false;
+            }
+            if ($("select#CityId").val() === "") {
+                $('#errorCity').html('Please select city');
+                count = count + 1;
+                return false;
+            }
+
+            if (count === 0) {
+                return true;
+            } else {
+                $("#myModal").modal('show');
+                return false;
+            }
+        }
+    </script>
+}

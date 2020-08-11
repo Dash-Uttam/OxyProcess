@@ -1,0 +1,67 @@
+﻿@*//This function is for add edit group permission
+              //start add edit permission
+              $('#addEditPermission').on("click", function () {
+                 if (isaddpermision()) {
+                     var groupPermission = new Object();
+                         groupPermission.groupPermissionViewModel = new Object();
+                         groupPermission.groupPermissionViewModel.GroupId = grpid;
+                         groupPermission.groupPermissionViewModel.Read = $('#groupPermissionViewModel_Read').is(":checked");
+                         groupPermission.groupPermissionViewModel.Write = $('#groupPermissionViewModel_Write').is(":checked");
+                         groupPermission.groupPermissionViewModel.Edit = $('#groupPermissionViewModel_Edit').is(":checked");
+                         groupPermission.groupPermissionViewModel.Delete = $('#groupPermissionViewModel_Delete').is(":checked");
+                         groupPermission.groupPermissionViewModel.None = $('#groupPermissionViewModel_None').is(":checked");
+                       $.ajax({
+                           type: "Post",
+                           url: "@Url.Action("GroupPermission", "Group")",
+                           data: groupPermission,
+                           success: function (response) {
+                               if (response.success == true) {
+                                   if (response.permissionEditSuccess == true) {
+                                       swal({
+                                           text: response.message,
+                                           type: 'success',
+                                           confirmButtonText: 'Ok',
+                                       }).then(function () {
+                                           location.reload(true);
+                                       });
+
+                                   }
+                                   if (response.permissionAddSuccess == true) {
+                                       swal({
+                                           text: response.message,
+                                           type: 'success',
+                                           confirmButtonText: 'Ok',
+                                       }).then(function () {
+                                           location.reload(true);
+                                       });
+                                   }
+
+                               } else {
+                                   swal({
+                                       text: response.message,
+                                       type: 'error',
+                                       confirmButtonText: 'Ok',
+                                   }).then(function () {
+                                       location.reload(true);
+                                   });
+                               }
+                        },
+                        error: function () {
+                            swal(response.message, "", "error");
+                            location.reload(true);
+                        }
+
+                    });
+            }
+            else {
+                 swal({
+                     text: "Please select at least one checkbox.",
+                     type: "warning",
+                     showCancelButton: false,
+                     confirmButtonColor: '#DD6B55',
+                     confirmButtonText: 'Ok',
+                     cancelButtonText: "No, cancel plx!",
+                 });
+               }
+            });
+            //end add edit permission*@

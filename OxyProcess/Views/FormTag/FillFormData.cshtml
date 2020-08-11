@@ -1,0 +1,683 @@
+﻿@model OxyProcess.Models.FormTag.TaginsidTemplatesViewModel
+@{
+    ViewData["Title"] = "ViewTemplate";
+}
+
+
+
+
+
+@section Styles{
+    <link rel='stylesheet' href='https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css'>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+
+        .editable-clear-x {
+            position: absolute !important;
+        }
+
+        .editable-submit, .editable-cancel {
+            width: 50px !important;
+            margin: 0px 0px 0 8px !important;
+        }
+
+        .editable-click, a.editable-click, a.editable-click:hover {
+            text-decoration: none;
+            border-bottom: none 1px #0088cc;
+        }
+
+        .company-detail label {
+            display: block;
+        }
+
+        .company-detail span {
+            position: relative;
+            display: block;
+        }
+
+        .modal-body select {
+            height: 33px !important;
+        }
+
+
+        .autocomplete-suggestions {
+            text-align: left;
+            border: 1px solid #999;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+            background: #FFF;
+            overflow: auto;
+        }
+
+        .autocomplete-suggestion {
+            padding: 5px 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .autocomplete-selected {
+            background: #F0F0F0;
+        }
+
+        .autocomplete-suggestions strong {
+            font-weight: normal;
+            color: #3399FF;
+        }
+
+        .autocomplete-group {
+            padding: 2px 5px;
+        }
+
+            .autocomplete-group strong {
+                display: block;
+                border-bottom: 1px solid #000;
+            }
+
+        #myModal .modal-dialog {
+            position: unset;
+            margin: 7.75rem auto;
+        }
+
+        .btn-comp {
+            width: 131px !important;
+        }
+
+        .cov-d {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .cov-d {
+            width: 100%;
+            margin: 0 auto;
+            max-width: 311px;
+        }
+
+        .heading {
+            text-align: center;
+        }
+
+        .detail-user label {
+            color: #000;
+        }
+
+        .form-group.col-md-12 {
+            border-bottom: 1px solid #eee;
+            padding: 9px 0;
+        }
+
+        .cov-da {
+            max-width: 393px;
+            margin: 0 auto;
+        }
+
+            .cov-da input {
+                /* width: 22px; */
+                margin: 0 4px -8px 0;
+                /* font-size: 20px; */
+                /* font: 400 18.3333px Arial; */
+                border: 0px;
+                width: 22px;
+                height: 19px;
+            }
+
+        .inputshow h2 {
+            font-weight: 600;
+            color: #000;
+        }
+
+        .inputshow label {
+            color: #000;
+            font-weight: 400;
+        }
+
+        .form-group.inputshow span {
+            display: inline-block;
+            margin: -8px 0 -3px;
+            position: relative;
+            top: -4px;
+        }
+
+        input.form-control {
+            width: 100%;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            height: 40px;
+        }
+        /*field csss*/
+        .datepicker {
+            width: 180px;
+            margin: 0 20px 20px 20px;
+        }
+
+            .datepicker > span:hover {
+                cursor: pointer;
+            }
+
+        .fileslistinside {
+            text-align: center;
+            border: blueviolet;
+            margin: 0px 0px -8px 0px;
+            padding: 1px 0px 20px 0px;
+            border-style: dotted;
+        }
+
+            .fileslistinside span {
+                padding: 0px 0px 0px 24px;
+                margin-top: 11px;
+                text-align: initial;
+            }
+
+        .iconspaceleft {
+            padding: 0 0 0 6px;
+        }
+
+
+
+        .inputshow input, .inputshow select {
+            margin: 0 0 19px;
+        }
+
+        .inputshow label {
+            font-size: 15px;
+            margin: 0 0 4px;
+            font-weight: 600;
+        }
+
+        .inputshow h3 {
+            color: #000;
+            font-size: 22px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .inputshow input, .inputshow select {
+            margin: 0 0 19px;
+            border-radius: .25rem;
+        }
+
+        .inputshow textarea {
+            border-radius: 3px;
+            display: block;
+            width: 100%;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+
+        label.label-class input, label.label-class span {
+            display: inline-block;
+            /* margin: 0; */
+        }
+
+        label.label-class input {
+            top: 2px;
+            position: absolute;
+        }
+
+        label.label-class {
+            position: relative;
+            margin: 0 0 13px;
+        }
+
+            label.label-class span {
+                margin: 0 28px 0;
+            }
+
+
+        .headerfirst {
+            font-weight: 700;
+            color: #5c4ac7;
+            text-align: center;
+            font-size: 22px;
+            text-transform: uppercase;
+        }
+        .headerfirst{
+
+            display: inline;
+        }
+        .heading-tagnumber{
+
+     
+    display: inline !important;
+        }
+    </style>
+
+}
+
+<div class="container-fluid justify-content-center mainview" style="display: none">
+    <!-- Start Page Content -->
+
+
+
+    <div class="row" id="editsingleitem">
+        <!-- Column -->
+        <div class="col-lg-6 col-sm-12  class-ad">
+            <div class="detail-user">
+                <div class="card">
+                    <div class="card-body">
+                        <div class=" row">
+                            <div class="col-md-12 " style="background-color:#e7efff">
+                                <div class="headerfirst">  TAG ID : <span class="heading-tagnumber"></span></div>
+                            </div>
+                            <div class="col-md-12">
+                                <h2 class="heading"></h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                @using (Html.BeginForm("SubmitNewForms", "FormTag", FormMethod.Post, new { enctype = "multipart/form-data", id = "SubmitNewForms" }))
+                                {
+                                    <div class="cov-da">
+                                        <div class="">
+                                            @*<div class="form-group  col-md-12 col-sm-12 col-xs-12">
+                                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                                </div>*@
+
+
+
+                                            <div class=" inputshow">
+
+
+                                            </div>
+
+                                            <input type="hidden" name="HiddenData" id="HiddenData" value="" />
+
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group col-sm-12 col-xs-12" id="Submitdynamic">
+
+                                    </div>
+                                    <div class="form-group col-sm-12 col-xs-12" style="text-align: center;">
+                                        <a class="btn btn-profile btn-primary btn-flat m-b-30 m-t-30 " href="#" onclick="location.href ='@Url.Action("TagReportCardList","FormTag",new { SearchTag=Model.TagNumber })'">Back</a>
+                                        <button class="btn btn-profile btn-primary btn-flat m-b-30 m-t-30 " id="btn-submit" type="submit">Submit</button>
+                                    </div>
+                                }
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <!-- Column -->
+
+    </div>
+</div>
+
+
+@section Scripts{
+    <!-- Scripts -->
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js'></script>
+
+    <script src='https://code.jquery.com/ui/1.11.4/jquery-ui.js'></script>
+
+    <script src='https://rawgit.com/digitalBush/jquery.maskedinput/master/dist/jquery.maskedinput.min.js'></script>
+
+
+    <script>
+
+
+        $(document).ready(function () {
+
+
+
+            var data = {
+                "TemplateuniqueId": '@Model.TemplateuniqueId',
+            }
+
+            $.ajax({
+                type: "Get",
+                url: "@Url.Action("GetNewFormFieldData", "FormTag")",
+                dataType: 'json',
+                data: data,
+                success: function (data) {
+                    
+                    if (data == 401) {
+                        var url = "http://www.mydomain.com/new-page.html";
+                        window.location.replace('@Url.Action("InvalidAccess", "Account")');
+                    }
+                    else {
+                         $(".preloader").hide();
+                         $(".mainview").show();
+                    }
+
+
+                    
+
+                    var identificationData = {
+                        "templateuniqueId": data.templateuniqueId,
+                        "orignalTemplateId": data.orignalTemplateId,
+                        "tagId": data.tagId
+                    };
+
+
+                    $("#HiddenData").val(JSON.stringify(identificationData));
+                    $(".heading").text(data.templateName);
+                    $(".heading-tagnumber").text(data.tagNumber);
+                    Templatedata = $.parseJSON(data.templateCloneCode);
+
+
+                    $(Templatedata).each(function (index,parent) {
+
+                        
+
+                        parent.placeholder = typeof(parent.placeholder) == "undefined" ? "" : parent.placeholder;
+
+                             if (parent.type == "customtitle") {
+
+                               var stringdata = "";
+                               stringdata = '<label for="usr">' + parent.label + '</label><div>';
+                               stringdata = stringdata +'<input type="text" name="' + parent.name + '" placeholder="'+parent.placeholder+'"    class="form-control" /></div>';
+                               $('.inputshow').append(stringdata);
+
+
+                        }
+
+                        if (parent.type == "text") {
+                             var stringdata = "";
+                           stringdata = '<label for="usr">' + parent.label + '</label><div>';
+                          stringdata= stringdata +'<input type="text" name="' + parent.name + '"   placeholder="'+parent.placeholder+'"  maxlength="'+parent.maxlength+'"  class="form-control" /></div>';
+                            $('.inputshow').append(stringdata);
+
+
+                        }
+
+
+                        if (parent.type == "header") {
+
+                            $('.inputshow').append('<h3 for="usr">' + parent.label + '</label>');
+
+                        }
+
+
+
+                        if (parent.type == "radio-group") {
+
+                            var stringdata = "";
+                           stringdata =' <label for="usr rediogroup">' + parent.label + '</label> <div>';
+
+
+                            $(parent.values).each(function (index,value) {
+
+                                
+                                if (parent.selected === true) {
+                                    stringdata = stringdata +' <label  class="label-class"> <input type="radio" name =' + parent.name + '  value=' + value.value + ' checked  /> <span>' + value.label + '</span></label> ';
+                                }
+
+                                else{
+                                    stringdata = stringdata +' <label  class="label-class"> <input type="radio" name =' + parent.name + '  value=' + value.value + '  /> <span>' + value.label + '</span></label> ';
+                                }
+
+                            })
+                              stringdata = stringdata +'</div>';
+                              $('.inputshow').append(stringdata);
+
+                        }
+
+                        if (parent.type == "checkbox-group") {
+                            
+                             var stringdata = "";
+                           stringdata = '<label for="usr">' + parent.label + '</label><div>';
+
+
+                            $(parent.values).each(function (index,value) {
+
+                                //for selectd or not logic
+
+                                
+                                if (parent.selected === true) {
+                                     stringdata = stringdata + ' <label class="label-class"> <input type="checkbox" name =' + parent.name + '  value=' + value.value + ' checked /> <span>' + value.label + '</span></label> ';
+                                }
+                                else {
+                                   stringdata =stringdata+  ' <label class="label-class"> <input type="checkbox" name =' + parent.name + '  value=' + value.value + ' /> <span>' + value.label + '</span></label> ';
+                                }
+                            })
+
+                            stringdata = stringdata +'</div>';
+
+                            $('.inputshow').append(stringdata);
+                        }
+
+
+                        if (parent.type == "select") {
+
+                            $('.inputshow').append('<label for="usr">' + parent.label + '</label>');
+                            var option = "";
+
+                            option ="<option value=''> Select Value</option>"
+                            $(parent.values).each(function (index,value) {
+
+                                if (parent.selected === true) {
+                                    option = option + '<option value="' + value.value + '"selected>' + value.label + '</option>';
+
+                                }
+                                else {
+                                   option = option + '<option value="' + value.value + '">' + value.label + '</option>';
+                                }
+
+                            })
+                            $('.inputshow').append('<div><select name="' + parent.name + '" id="' + parent.id + '" class="form-control"> ' + option + '</select></div>');
+                        }
+
+
+
+                        if (parent.type == "textarea") {
+                            
+                            var stringdata = "";
+                            stringdata = '<label for="usr">' + parent.label + '</label><div>';
+                            stringdata = stringdata + '<textarea rows="' + parent.rows + '" name="' + parent.name + '"  placeholder="'+parent.placeholder+'"   maxlength="' + parent.maxlength + '" cols="50" class=""></textarea></div>';
+                            $('.inputshow').append(stringdata);
+                        }
+
+
+
+                        if (parent.type == "date") {
+                             var stringdata = "";
+                            stringdata = '<label for="usr">' + parent.label + '</h2><div>';
+                            stringdata = stringdata + '<input type="text" name="' + parent.name + '"  placeholder="'+parent.placeholder+'"    class="form-control datepick" />  </div>';
+                            $('.inputshow').append(stringdata);
+jQuery(function($) {
+    $(document).on('click', '.datepick', function () {
+        var me = $(".datepick");
+        me.datepicker({
+            showOn: 'focus',
+            altFormat: "mm/dd/yy",
+            dateFormat: "mm/dd/yy",
+            minDate: '12/12/2000',
+            maxDate: '12/12/2020'
+        }).focus();
+    }).on('focus', '.datepick', function () {
+        var me = $(".datepick");
+        me.mask('99/99/9999');
+    });
+});
+
+
+
+                        }
+
+
+                        if (parent.type == "number") {
+
+                            
+
+                            var stringdata = "";
+                            stringdata =stringdata + '<label for="usr">' + parent.label + '</lable><div>';
+                            stringdata =stringdata +'<input type="number" name="' + parent.name + '"  min="' + parent.min + '"  max="' + parent.max + '" placeholder="'+parent.placeholder+'"   class="form-control" />';
+                            $('.inputshow').append(stringdata);
+                        }
+                        if (parent.type == "file") {
+
+                             var stringdata = "";
+                           stringdata =stringdata + '<label for="usr">' + this.label + '</lable><div>';
+
+                            if (parent.multiple == true) {
+                                stringdata =stringdata + '<input type="file" name="' + parent.name + '"  multiple="' + parent.multiple + '"  class="form-control"/>';
+                            }
+                            else {
+
+                              stringdata =stringdata + '<input type="file" name="' + parent.name + '"   class="form-control"/>';
+
+
+                            }
+                            stringdata = stringdata + '</div>';
+                             $('.inputshow').append(stringdata);
+
+
+
+                        }
+                    })
+
+
+                    $(".preloader").hide();
+                }
+
+
+            })
+
+
+
+
+
+            $("form").submit(function () {
+                
+                 var formdata = this;
+                var data = {
+                    "TemplateuniqueId": '@Model.TemplateuniqueId',
+                }
+                $(".preloader").show();
+                $.ajax({
+                    type: "Get",
+                    url: "@Url.Action("GetNewFormFieldData", "FormTag")",
+                    dataType: 'json',
+                    data: data,
+                    success: function (data) {
+                        
+                        if (data == 401) {
+                            var url = "http://www.mydomain.com/new-page.html";
+                            window.location.replace('@Url.Action("InvalidAccess", "Account")');
+                        }
+                        else {
+                            $(".preloader").hide();
+                            $(".mainview").show();
+                        }
+
+
+                        
+
+                       var formvalid = true;
+
+                        var requiredfields = [];
+                         var Templatedata = $.parseJSON(data.templateCloneCode);
+
+                        $(Templatedata).each(function (index, parent) {
+
+                            
+                            if (typeof(this.required) != "undefined") {
+
+                                requiredfields.push(this.name);
+
+                            }
+
+                        });
+
+
+                        var Formvalues = $(formdata).serializeArray();
+
+                        $(requiredfields).each(function (index, parent) {
+                            
+                            //it mean's its required.
+                            var result = $.grep(Formvalues, function(e){ return e.name ==requiredfields[index]; });
+                            $("[name=" + requiredfields[index] + "]").css("border", "1px solid #ced4da");
+                            $("[name=" + requiredfields[index] + "]").parent().parent().css("border-style", "none");
+
+
+                            if ($("[name=" + requiredfields[index] + "]")[0].type === "file") {
+
+                                if ($("[name=" + requiredfields[index] + "]")[0].files.length === 0) {
+
+                                      formvalid = false;
+                                       $("[name=" + requiredfields[index] + "]").css("border-color", "#dc3545")
+
+
+
+                                }
+
+
+
+
+                            }
+                            else {
+
+                                if (result.length == 0) {
+
+                                      formvalid = false;
+                                    $("[name=" + requiredfields[index] + "]").parent().parent().css("border", "1px solid #dc3545");
+                                    //$("[name=" + requiredfields[index] + "]").parent().parent().css("border-color","#dc3545")
+                                    //$("[name=" + requiredfields[index] + "]").parent().parent().css("border-color", "Red");
+
+                                }
+
+
+                                else if (result[0].value == "") {
+
+                                      formvalid = false;
+                                    $("[name=" + requiredfields[index] + "]").css("border-color", "#dc3545")
+                                    //$("[name=" + requiredfields[index] + "]").css("border-color", "Red");
+
+                                }
+
+                            }
+
+
+                        })
+                        if (formvalid === false) {
+
+                            return false;
+
+                        }
+                        else {
+
+                            formdata.submit();
+
+                        }
+                           $(".preloader").hide();
+                    }
+
+                });
+
+                //privent to submit form without ajax call trick
+                  return false;
+
+            });
+        });
+    </script>
+
+}

@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<!-- Container fluid  -->
+<div class="container-fluid">
+    <!-- Start Page Content -->
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-12">
+
+
+
+            <div class="card">
+                <div class="card-body">
+                    <div class=" row">
+                        <div class="col-md-12">
+                            <div class="search-d">
+                                @*@using (Html.BeginForm("TagSearchResult", "FormTag", FormMethod.Get))
+                                    {
+                                        <div class="input-group input-group-default">
+                                            <span class="input-group-btn"><button class="btn btn-primary" type="submit"><i class="ti-search"></i></button></span>
+                                            <input placeholder="Search Tag Number" id="SearchTag" name="SearchTag" type="text" maxlength="17" class="form-control" required>
+                                        </div>
+
+                                    }*@
+
+                                @using (Html.BeginForm("TagReportCardList", "FormTag", FormMethod.Get))
+                                {
+                                    <div class="input-group input-group-default">
+                                        <span class="input-group-btn"><button class="btn btn-primary" type="submit"><i class="ti-search"></i></button></span>
+                                        <input placeholder="Enter Tag Number" id="SearchTag" name="SearchTag" type="text" maxlength="17" class="form-control" required>
+                                    </div>
+
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+@section Scripts{
+
+    @if (TempData["TagErrorMessage"] != null)
+    {
+        @*<div class="alert alert-danger"> Tag not found. <a class="pull-right" style="cursor:pointer;" data-dismiss="alert">x</a> </div>*@
+        <script>
+                swal({
+                    text: 'Tag Not Found.',
+                    type: 'error',
+                    confirmButtonText: 'Ok',
+                }).then(function () {
+
+                });
+
+
+        </script>
+    }
+
+
+    <script type="text/javascript">
+        $(function () {
+            $('[id*=SearchTag]').on('keypress', function () {
+                var number = $(this).val();
+                if (number.length == 2) {
+                    $(this).val($(this).val() + '-');
+                }
+                else if (number.length == 7) {
+                    $(this).val($(this).val() + '-');
+                }
+
+                else if (number.length == 7) {
+                    $(this).val($(this).val() + '-');
+                }
+
+                else if (number.length == 12) {
+                    $(this).val($(this).val() + '-');
+                }
+            });
+        });
+
+         
+
+
+
+    </script>
+}

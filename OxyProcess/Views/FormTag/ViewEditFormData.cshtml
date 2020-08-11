@@ -1,0 +1,864 @@
+﻿@model List<OxyProcess.Models.FormTag.TemplateFieldsViewModel>
+@{
+    ViewData["Title"] = "FormData";
+}
+
+
+@section Styles{
+  
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+
+        .editable-clear-x {
+            position: absolute !important;
+        }
+
+        .editable-submit, .editable-cancel {
+            width: 50px !important;
+            margin: 0px 0px 0 8px !important;
+        }
+
+        .editable-click, a.editable-click, a.editable-click:hover {
+            text-decoration: none;
+            border-bottom: none 1px #0088cc;
+        }
+
+        .company-detail label {
+            display: block;
+        }
+
+        .company-detail span {
+            position: relative;
+            display: block;
+        }
+
+        .modal-body select {
+            height: 33px !important;
+        }
+
+
+        .autocomplete-suggestions {
+            text-align: left;
+            border: 1px solid #999;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+            background: #FFF;
+            overflow: auto;
+        }
+
+        .autocomplete-suggestion {
+            padding: 5px 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .autocomplete-selected {
+            background: #F0F0F0;
+        }
+
+        .autocomplete-suggestions strong {
+            font-weight: normal;
+            color: #3399FF;
+        }
+
+        .autocomplete-group {
+            padding: 2px 5px;
+        }
+
+            .autocomplete-group strong {
+                display: block;
+                border-bottom: 1px solid #000;
+            }
+
+        #myModal .modal-dialog {
+            position: unset;
+            margin: 7.75rem auto;
+        }
+
+        .btn-comp {
+            width: 131px !important;
+        }
+
+        .cov-d {
+            width: 100%;
+            max-width: 358px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .cov-d {
+            width: 100%;
+            margin: 0 auto;
+            max-width: 358px;
+        }
+
+        .heading {
+            text-align: center;
+        }
+
+        .heading-two {
+            text-align: left;
+            font-weight: 700;
+    color: #5c4ac7;
+    
+    font-size: 22px;
+    text-transform: uppercase;
+    background-color:#e7efff;
+        }
+
+        .detail-user label {
+            color: #000;
+        }
+
+        .form-group.col-md-12 {
+            border-bottom: 1px solid #eee;
+            padding: 9px 0;
+        }
+
+        .cov-da {
+            max-width: 358px;
+            margin: 0 auto;
+        }
+
+            .cov-da input {
+                /* width: 22px; */
+                margin: 0 4px -8px 0;
+                /* font-size: 20px; */
+                /* font: 400 18.3333px Arial; */
+                border: 0px;
+                width: 22px;
+                height: 19px;
+            }
+
+        .inputshow h2 {
+            font-weight: 600;
+            color: #000;
+        }
+
+        .inputshow label {
+            color: #000;
+            font-weight: 400;
+        }
+
+        .form-group.inputshow span {
+            display: inline-block;
+            margin: -8px 0 -3px;
+            position: relative;
+            top: -4px;
+        }
+
+        input.form-control {
+            width: 100%;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            height: 40px;
+        }
+        /*field csss*/
+        .datepicker {
+            width: 180px;
+            margin: 0 20px 20px 20px;
+        }
+
+            .datepicker > span:hover {
+                cursor: pointer;
+            }
+
+        .fileslistinside {
+            text-align: center;
+            border: blueviolet;
+            margin: 0px 0px -8px 0px;
+            padding: 1px 0px 20px 0px;
+            border-style: dotted;
+        }
+
+            .fileslistinside span {
+                padding: 0px 0px 0px 24px;
+                margin-top: 11px;
+                text-align: initial;
+            }
+
+        .iconspaceleft {
+            padding: 0 0 0 6px;
+        }
+
+        .label-value {
+            font-weight: 100 !important;
+        }
+           .heading{
+
+            text-align: center;
+            position:relative;
+
+        }
+        .delete-span {
+    display: inline-block;
+    text-align: right;
+    float: right;
+    position: absolute;
+    top: 0px;
+    right: 0;
+}
+
+        .edit-c {
+            top: 0px ;
+        }
+    </style>
+
+}
+
+<div class="container-fluid justify-content-center">
+    <!-- Start Page Content -->
+    <div class="row" id="fildslistmain">
+        <!-- Column -->
+        <div class="col-lg-6 col-sm-12  class-ad">
+            <div class="detail-user">
+                <div class="card">
+                    <div class="card-body">
+                        <div class=" row">
+                            <div class="col-md-12">
+                                <h2 class="heading-two">Tag ID : @ViewBag.TagNumber</h2>
+
+                                <h2 class="heading">
+                                     @Model.Select(e => e.FormName).Take(1).ElementAtOrDefault(0)
+
+                                        @if(@Model.Select(e => e.TemplateType).Take(1).ElementAtOrDefault(0) == 1 && @Model.Select(e => e.WritePermission).Take(1).ElementAtOrDefault(0) == true)
+                                        {
+                                            <span class="delete-span"><a class="DeleteFormEntryById" href="#" id="@ViewBag.DataEntryId"><i class="tooltip-top fa fa-trash-o"></i></a></span>
+                                        }
+
+                                        
+
+                                </h2>
+                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                <form>
+                                    <div class="cov-d">
+                                        <div class="row">
+                                            @*<div class="form-group  col-md-12 col-sm-12 col-xs-12">
+                                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                                </div>*@
+                                            @foreach (var d in Model)
+                                            {
+
+                                                if (d.type == "header")
+                                                {
+
+                                                    <div class="form-group col-md-12 " style="text-align: center;background-color: #e4f2f4;">
+                                                        <label>@Html.Raw(@d.label)</label>
+
+                                                    </div>
+                                                }
+
+                                                else
+                                                {
+
+
+                                        <div class="form-group col-md-12 ">
+                                            <label title="@d.description" >@Html.Raw(d.label)</label>
+                                            @if (d.type == "file" && d.Files != null)
+                                            {
+                                                foreach (var file in d.Files)
+                                                {
+
+                                                    <span>
+                                                        @file.Name.Split("@")[1]<a href="@Url.Action("downloadFile", "FormTag", new {FileId=file.Id })" download><i class="fa fa-download iconspaceleft" aria-hidden="true"></i></a>
+                                                    </span>
+                                                }
+
+                                            }
+
+                                            else
+                                            {
+
+
+                                                <label class="label-value">
+
+                                                    @if (d.value != null)
+                                                    {
+                                                        @d.value.ToString()
+                                                    }
+                                                </label>
+
+
+                                            }
+
+                                            @if (d.WritePermission == true)
+                                            {
+
+                                                <a title="" data-original-title="" class="editable editable-click selectadddata" href="#" data-type="text" id="@ViewBag.DataEntryId" name="@d.name" tagnumber="@ViewBag.TagNumber" data-placement="right" data-title="Enter LastName">
+                                                    <span class="edit-c">
+                                                        <i class="fa fa-pencil" aria-hidden="true">
+                                                        </i>
+                                                    </span>
+                                                </a>
+
+                                            }
+
+
+
+                                        </div>
+                                                }
+
+                                            }
+
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group col-sm-12 col-xs-12" style="text-align: center;">
+                                        <a class="btn btn-profile btn-primary btn-flat m-b-30 m-t-30 " @*onclick="window.location.href =document.referrer"*@ href="@Url.Action("TagReportCardList","FormTag",new {SearchTag =ViewBag.TagNumber})">Back</a>
+
+                                    </div>
+                                </form>
+
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <!-- Column -->
+
+    </div>
+
+    <div class="row" id="editsingleitem">
+        <!-- Column -->
+        <div class="col-lg-6 col-sm-12  class-ad">
+            <div class="detail-user">
+                <div class="card">
+                    <div class="card-body">
+                        <div class=" row">
+                            <div class="col-md-12">
+                                <h2 class="heading-two">Tag ID : @ViewBag.TagNumber</h2>
+
+                                <h2 class="heading"> @Model.Select(e => e.FormName).Take(1).ElementAtOrDefault(0)</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                @using (Html.BeginForm("SetSingleInputForReportCardEdit", "FormTag", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    <div class="cov-da">
+                                        <div class="">
+                                            @*<div class="form-group  col-md-12 col-sm-12 col-xs-12">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </div>*@
+
+
+
+                                            <div class="form-group inputshow">
+
+
+                                            </div>
+                                            <input type="hidden" name="HiddenDataTemplateUniqid" id="HiddenDataTemplateUniqid" value="" />
+                                            <input type="hidden" name="HiddenDataId" id="HiddenDataId" value="" />
+                                            <input type="hidden" name="FieldName" id="FieldName" value="" />
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group col-sm-12 col-xs-12" id="Submitdynamic">
+
+                                    </div>
+                                    <div class="form-group col-sm-12 col-xs-12" style="text-align: center;">
+                                        <button class="btn btn-profile btn-primary btn-flat m-b-30 m-t-30 " type="button" @*id="backshowmain"*@ onclick="location.reload();">Back</button>
+                                        <button class="btn btn-profile btn-primary btn-flat m-b-30 m-t-30 " type="submit">Save</button>
+                                    </div>
+
+
+
+                                }
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <!-- Column -->
+
+    </div>
+</div>
+
+
+@section Scripts{
+    <!-- Scripts -->
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js'></script>
+    <script src="~/js/JqueryUI_1_11_2.js"></script>
+    <script src='https://rawgit.com/digitalBush/jquery.maskedinput/master/dist/jquery.maskedinput.min.js'></script>
+
+
+    <script>
+        $("form").submit(function(e) {
+     $(".preloader").show();
+});
+
+
+
+        $("#editsingleitem").hide();
+
+
+
+          $('#backshowmain').on('click', function () {
+
+
+              $("#editsingleitem").hide();
+              $("#fildslistmain").show();
+              $("#Submitdynamic").empty();
+
+
+
+        })
+
+         $(document).on('click',".DeleteFileById",function () {
+
+
+
+             var thisli = this;
+                   $.ajax({
+                    type: "Post",
+                    url: "@Url.Action("DeleteFile", "FormTag")",
+                    data: {
+                        FileId: this.id,
+
+                    },
+                       success: function (response) {
+                           if (response === "Sucess") {
+                               thisli.parentElement.remove();
+                                   if ($("#Submitdynamic").find("span").length == 0) {
+                                       $("#Submitdynamic").removeAttr("class", "fileslistinside");
+                                   }
+                               swal({
+                                   text: 'File Delete Successfully',
+                                   type: 'success',
+                                   confirmButtonText: 'Ok',
+                               }).then(function () {
+
+                               });
+
+                           }
+
+                           else {
+
+                               swal({
+                                   text: response.message,
+                                   type: 'error',
+                                   confirmButtonText: 'Ok',
+                               })
+                           }
+                    },
+                    error: function () {
+                        alert("Error in Ajax");
+                        location.reload(true);
+                    }
+
+                });
+
+           });
+
+
+            $(document).on('click',".DeleteFormEntryById",function () {
+
+
+
+             var thisli = this;
+                   $.ajax({
+                    type: "Post",
+                    url: "@Url.Action("DeleteFormEntryById", "FormTag")",
+                    data: {
+                        EntryId: this.id,
+
+                    },
+                       success: function (response) {
+                           if (response === "Sucess") {
+                               thisli.parentElement.remove();
+                                   if ($("#Submitdynamic").find("span").length == 0) {
+                                       $("#Submitdynamic").removeAttr("class", "fileslistinside");
+                                   }
+                               swal({
+                                   text: 'Entry Delete Successfully',
+                                   type: 'success',
+                                   confirmButtonText: 'Ok',
+                               }).then(function () {
+                                   window.location.replace('@Url.Action("TagReportCardList","FormTag",new {SearchTag =ViewBag.TagNumber})');
+                               });
+
+                           }
+
+                           else {
+
+                               swal({
+                                   text: response.message,
+                                   type: 'error',
+                                   confirmButtonText: 'Ok',
+                               })
+                           }
+                    },
+                    error: function () {
+                        alert("Error in Ajax");
+                        location.reload(true);
+                    }
+
+                });
+
+           });
+
+
+
+        $('.selectadddata').on('click', function ()
+        {
+
+            var data = {
+                "name": this.name,
+                "TagNumber": this.tagnumber,
+                "FormUniquId":@ViewBag.FormUniqueId,
+                "Id":this.id
+              };
+  $(".preloader").show();
+        $.ajax({
+            type: "Get",
+            url: "@Url.Action("GetSingleInputForReportCard","FormTag")",
+            dataType: 'json',
+            data: data,
+            success: function (Responcedata) {
+
+
+                var data = Responcedata.data;
+                data.placeholder = data.placeholder == null ? "" : data.placeholder;
+                $("#HiddenDataTemplateUniqid").val(data.templateuniqueId);
+                $("#HiddenDataId").val(@ViewBag.DataEntryId);
+                 $("#FieldName").val(data.name);
+
+                if (data.type == "text") {
+                    $('.inputshow').empty();
+                    $('.inputshow').append('<h2 for="usr">' + data.label + '</h2>');
+                    $('.inputshow').append('<input type="text" name="'+ data.name +'" maxlength="'+data.maxlength+'" placeholder="'+data.placeholder+'" value="'+data.value+'" class="form-control"/>');
+                }
+
+
+                if (data.type == "customtitle") {
+                    $('.inputshow').empty();
+                    $('.inputshow').append('<h2 for="usr">' + data.label + '</h2>');
+                    $('.inputshow').append('<input type="text" name="'+ data.name +'" maxlength="'+data.maxlength+'" placeholder="'+data.placeholder+'" value="'+data.value+'" class="form-control"/>');
+                }
+
+
+                if (data.type == "radio-group") {
+                    $('.inputshow').empty();
+                    $('.inputshow').append('<h2 for="usr">' + data.label + '</h2>');
+
+                    $(data.values).each(function (index) {
+
+                           if (data.values[index].selected == true) {
+                                $('.inputshow').append(' <label> <input type="radio" name =' + data.name + '  value=' + this.value + ' checked/> ' + this.label + '</label> ');
+                            }
+                            else {
+
+                                $('.inputshow').append(' <label> <input type="radio" name =' + data.name + '  value=' + this.value + ' /> ' + this.label + '</label> ');
+
+                            }
+
+
+
+
+
+                    })
+
+                }
+
+                    if (data.type == "checkbox-group") {
+                    $('.inputshow').empty();
+                    $('.inputshow').append('<h2 for="usr">' + data.label + '</h2>');
+
+
+
+
+                        $(data.values).each(function (index) {
+
+
+                                //for selectd or not logic
+                                if (data.values[index].selected == true) {
+                                    $('.inputshow').append(' <label> <input type="checkbox" name =' + data.name + '  value="' + this.value + '" checked /> <span>' + this.label + '</span></label> ');
+                                }
+
+                                else {
+                                    $('.inputshow').append(' <label> <input type="checkbox" name ="' + data.name + '"  value="' +this.value +'" /> <span>' + this.label + '</span></label> ');
+                                }
+
+                    })
+
+
+
+                }
+
+
+                if (data.type == "select") {
+                    $('.inputshow').empty();
+                    $('.inputshow').append('<h2 for="usr">' + data.label + '</h2>');
+                    var option = "";
+                     option ="<option value=''> Select Value</option>"
+                    $(data.values).each(function (index) {
+
+
+
+                           if (data.values[index].selected == true) {
+
+                                option = option + '<option value="' + this.value + '"selected>' + this.label + '</option>';
+                            }
+
+                            else {
+                                option = option + '<option value="' + this.value + '">' + this.label + '</option>';
+
+
+                            }
+
+                    })
+
+                  $('.inputshow').append('<select name="' + data.name + '" id="' + data.id + '" class="form-control"> ' + option + '</select>');
+
+                }
+
+
+
+                  if (data.type == "textarea") {
+                    $('.inputshow').empty();
+                    $('.inputshow').append('<h2 for="usr">' + data.label + '</h2>');
+                    $('.inputshow').append('<textarea rows="'+data.rows+'" name="'+ data.name +'" placeholder="'+data.placeholder+'"  maxlength="'+data.maxlength+'" cols="50">'+data.value+'</textarea>');
+
+                }
+
+
+
+                if (data.type == "date") {
+
+
+
+                    $('.inputshow').empty();
+                    $('.inputshow').append('<h2 for="usr">' + data.label + '</h2>');
+                    $('.inputshow').append('<input type="text" name="'+ data.name +'"  placeholder="'+data.placeholder+'"  value="'+data.value+'"   class="form-control datepick"/>');
+                     jQuery(function($) {
+    $(document).on('click', '.datepick', function () {
+        var me = $(".datepick");
+        me.datepicker({
+            showOn: 'focus',
+            altFormat: "mm/dd/yy",
+            dateFormat: "mm/dd/yy",
+            minDate: '12/12/2000',
+            maxDate: '12/12/2020'
+        }).focus();
+    }).on('focus', '.datepick', function () {
+        var me = $(".datepick");
+        me.mask('99/99/9999');
+
+    });
+});
+                }
+
+
+                 if (data.type == "number") {
+
+                    $('.inputshow').empty();
+                    $('.inputshow').append('<h2 for="usr">' + data.label + '</h2>');
+                    $('.inputshow').append('<input type="number" name="'+ data.name +'"   placeholder="'+data.placeholder+'" min="'+ data.min +'"  max="'+ data.max +'" value="'+data.value+'" class="form-control"/>');
+
+                }
+                 if (data.type == "file") {
+
+                    $('.inputshow').empty();
+                     $('.inputshow').append('<h2 for="usr">' + data.label + '</h2>');
+
+                     if (data.multiple == true) {
+                         $('.inputshow').append('<input type="file"  placeholder="'+data.placeholder+'" name="' + data.name + '"  multiple="' + data.multiple + '"  class="form-control"/>');
+                     }
+                     else{
+
+                                                  $('.inputshow').append('<input type="file" name="' + data.name + '"   class="form-control"/>');
+
+
+                     }
+
+                     if (data.files.length > 0) {
+                         $('#Submitdynamic').attr("class", "fileslistinside");
+
+
+
+                         $(data.files).each(function (index) {
+                             $('#Submitdynamic').append('<span>' + data.files[index].name.split("@@")[1] + ' <a href="@Url.Action("downloadFile","FormTag")?FileId=' + data.files[index].id + '" download><i class="fa fa-download iconspaceleft" aria-hidden="true"></i></a> <a id="'+data.files[index].id +'" class="DeleteFileById" href="#"> <i   class="fa fa-trash " aria-hidden="true"></i></a></span> ');
+
+                         })
+
+
+                     }
+
+
+                }
+                $("#editsingleitem").show();
+                $("#fildslistmain").hide();
+                $(".preloader").hide();
+            }
+
+
+        })
+
+
+
+
+
+
+
+
+
+
+    });
+
+
+
+
+    $(document).ready(function () {
+
+
+
+               $("form").submit(function () {
+                 var formdata = this;
+                var data = {
+                    "TemplateuniqueId": '@ViewBag.FormUniqueId',
+                }
+                $(".preloader").show();
+                $.ajax({
+                    type: "Get",
+                    url: "@Url.Action("GetNewFormFieldData", "FormTag")",
+                    dataType: 'json',
+                    data: data,
+                    success: function (data) {
+                        if (data == 401) {
+                            var url = "http://www.mydomain.com/new-page.html";
+                            window.location.replace('@Url.Action("InvalidAccess", "Account")');
+                        }
+                        else {
+                            $(".preloader").hide();
+                            $(".mainview").show();
+                        }
+
+
+
+                       var formvalid = true;
+
+                        var requiredfields = [];
+                         var Templatedata = $.parseJSON(data.templateCloneCode);
+
+                        $(Templatedata).each(function (index, parent) {
+
+                            if (typeof(this.required) != "undefined") {
+
+                                requiredfields.push(this.name);
+
+                            }
+
+                        });
+
+
+                        var Formvalues = $(formdata).serializeArray();
+                        var resultSingleFiled = $.grep(Formvalues, function (e) { return e.name == "FieldName" });
+
+                        var matchrequredField = $.grep(requiredfields, function (e) { return e == resultSingleFiled[0].value });
+                        if (matchrequredField.length != 0) {
+
+                            //it mean's its required.
+                            var result = $.grep(Formvalues, function (e) { return e.name == resultSingleFiled[0].value });
+                            $("[name=" + matchrequredField + "]").css("border", "1px solid #ced4da");
+                            $("[name=" + matchrequredField + "]").parent().parent().css("border-style", "none");
+
+
+                            if ($("[name=" + matchrequredField + "]")[1].type === "file") {
+
+                                if ($("[name=" + matchrequredField + "]")[1].files.length === 0) {
+
+                                    formvalid = false;
+                                    $("[name=" + matchrequredField + "]").css("border-color", "#dc3545")
+
+
+
+                                }
+
+
+
+
+                            }
+                            else {
+
+                                if (result.length == 0) {
+
+                                    formvalid = false;
+                                    $("[name=" + matchrequredField + "]").parent().parent().css("border", "1px solid #dc3545");
+                                    //$("[name=" + requiredfields[index] + "]").parent().parent().css("border-color","#dc3545")
+                                    //$("[name=" + requiredfields[index] + "]").parent().parent().css("border-color", "Red");
+
+                                }
+
+
+                                else if (result[0].value == "") {
+
+                                    formvalid = false;
+                                    $("[name=" + matchrequredField + "]").css("border-color", "#dc3545")
+                                    //$("[name=" + requiredfields[index] + "]").css("border-color", "Red");
+
+                                }
+
+                            }
+
+
+                        }
+                        if (formvalid === false) {
+
+                            return false;
+
+                        }
+                        else {
+
+                            formdata.submit();
+
+                        }
+                           $(".preloader").hide();
+                    }
+
+                });
+
+                //privent to submit form without ajax call trick
+                  return false;
+
+            });
+
+    })
+
+
+
+
+    </script>
+
+}

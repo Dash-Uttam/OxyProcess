@@ -1,0 +1,289 @@
+﻿@*@model OxyProcess.Models*@
+@{
+    ViewData["Title"] = "Create Tag";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .input-group.input-group-default .btn {
+    margin: 0 9px;
+    color:white;
+
+}
+
+     .input-group.input-group-default .btn:hover {
+  
+    color:white;
+
+}
+</style>
+<div class="container-fluid">
+    <!-- Start Page Content -->
+
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class=" row">
+                        <div class="col-md-12">
+                            <h2 class="heading"> Tag</h2>
+                        </div>
+                    </div>
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row ">
+                        <div class="col-md-12 col-xs-12 col-sm-12 margin-auto">
+                            <div class="input-group input-group-default">
+                                <span class="input-group-btn">
+                                    <a class="btn btn-primary btn-createTag" href="@Url.Action("AddReportCard","FormTag")">Create New Tag Number</a>
+                                    <a class="btn btn-primary" href="@Url.Action("Index","Home")" type="button">Enter Tag ID</a>
+                                    @*<a class="btn btn-primary" href="#" type="button">Scan QR </a>*@
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="hed-table">
+                                <h2 class="">List of tag</h2>
+                            </div>
+                            <div class="table-responsive m-t-40 group-tabel">
+                                <table id="myTable" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Tag Number</th>
+                                            <th>Created Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+
+    </div>
+
+    <!-- End PAge Content -->
+</div>
+@section Scripts{
+
+  
+  
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+             var msg = '@ViewBag.Msg';
+            if (msg != null && msg!="") {
+                  swal({
+                   text: '@ViewBag.Msg',
+                   type: 'warning',
+                   confirmButtonText: 'Ok',
+                });
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetAllTags", "FormTag")",
+                "dataType": "json",
+                success: function (data) {
+                    datatableVariable = $('#myTable').DataTable({
+                         "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                        $('td', nRow).css('background-color', 'white');
+                },
+                        destroy: true,
+                        data: data,
+                        "order": [[3, "asc"]],
+                        'columnDefs': [{
+
+                            
+        'targets': [2], // column index (start from 0)
+        'orderable': false, // set orderable false for selected columns
+                        }, {
+
+                                "targets": [3],
+                                "visible": false,
+                                "searchable": false
+                            }],
+                        columns: [
+                            {
+                                'data': "TagNumber",
+                                'render': function (data) {
+                                    return "<span class='limittext'>" + data + "</span>"
+                                }
+                            },
+                            {
+                                'data': 'CreatedDate',
+                                'render': function (data) {
+                                    var date = new Date(data);
+                                    var month = date.getMonth() + 1;
+                                    return "<span class='limittext'>" + (month.toString().length > 1 ? month : "0" + month) + "/" + date.getDate() + "/" + date.getFullYear()  + "</span>"
+                                }
+                            },
+                            {
+                                'data': "Id",
+                                "render": function (data) {
+                                    return "<a title='Manage Tag' data-toggle='tooltip' class='tooltip-top  fa fa-arrow-right' href='/FormTag/EditFormTag/" + data + "'></a> / <a title='Delete' data-toggle='tooltip' class='tooltip-top  fa fa-trash-o' href='#' onclick=\'DeleteRow(" + data + ")\'></a>";
+                                }
+                            },
+                            {
+                                'data': "Id",
+                                "render": function (data) {
+                                    return "<a title='Manage Tag' data-toggle='tooltip' class='tooltip-top  fa fa-arrow-right' href='/FormTag/EditFormTag/" + data + "'></a> / <a title='Delete' data-toggle='tooltip' class='tooltip-top  fa fa-trash-o' href='#' onclick=\'DeleteRow(" + data + ")\'></a>";
+                                }
+                            }
+                            
+                        ]
+                    });
+                }
+            });
+
+        });
+        function DeleteRow(id) {
+
+            swal({
+                title: 'Are you sure?',
+                text: 'You will not be able to recover this Tag!',
+                type: 'warning',
+                showCancelButton: true,
+                animation: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete it!',
+                closeOnConfirm: false,
+                closeOnCancel: false
+
+            }).then(function (dismiss) {
+
+                if (dismiss.dismiss === 'cancel') {
+
+                } else {
+                    $.ajax({
+                    type: 'POST',
+                    url: "@Url.Action("DeleteTag", "FormTag")",
+                    dataType: "text",
+                    data: { id: id },
+                }).done(function () {
+
+                    swal({
+                        title: "Deleted",
+                        text: "Tag has been deleted successfully ",
+                        type: "success"
+                    }).then(function () {
+                        location.reload(true);
+                    });
+                });
+                }
+            });
+            }
+
+
+
+    // Create Tag
+
+            @*function CreateTagClick(id) {
+            //swal({
+            //    title: 'Are you sure?',
+            //    text: 'Do you Want To Create New Tag ?',
+            //    allowOutsideClick: false,
+            //    animation: false,
+            //    showCancelButton: true,
+            //    confirmButtonColor: '#3085d6',
+            //    cancelButtonColor: '#d33',
+            //    confirmButtonText: 'Yes, Create it!',
+            //    closeOnConfirm: false,
+            //    closeOnCancel: false
+
+            //}).then(function callajax (dismiss) {
+
+            //    if (dismiss.dismiss === 'cancel') {
+
+            //    } else {
+                    $.ajax({
+                        type: 'POST',
+                        url: "@Url.Action("CreateNewTag","FormTag")",
+                        dataType: "text",
+                        data: { Tagnumber: guid() },
+                        success: function (response) {
+
+                             var response = $.parseJSON(response);
+                            if (response.value === true) {
+                                swal({
+                                    title: "Success",
+                                    text: "Tag has been successfully Created.",
+                                    type: "success",
+                                    showCancelButton: false,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                }).then(function () {
+                                    location.reload(true);
+                                });
+                            }
+                            else if (response.value === 'MatchFound') {
+
+                               callajax("true");
+
+                            }
+
+                            else {
+                                 swal({
+                                    title: "Fail",
+                                    text: "Something wrong please try again.",
+                                    type: "error",
+                                    showCancelButton: true,
+                                     confirmButtonColor: '#3085d6',
+                                     cancelButtonColor: '#d33',
+                                }).then(function () {
+                                    location.reload(true);
+                                });
+
+
+                            }
+                        }
+                        });
+                //}
+           // });
+        }*@
+
+
+    // genrate GUID
+
+//    function guid() {
+//  function s4() {
+//    return Math.floor((1 + Math.random()) * 0x10000)
+//        .toString(16)
+//        .substring(1).toUpperCase();
+//  }
+//   function s2() {
+
+
+
+
+//  var length=2;
+//  var text = "";
+//  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+//  for (var i = 0; i < length; i++)
+//    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+//  return text;
+
+
+//  }
+//  return s2() + '-' + s4() + '-' + s4() + '-' + s4()
+//}
+
+
+
+    </script>
+}

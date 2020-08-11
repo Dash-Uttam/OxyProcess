@@ -1,0 +1,209 @@
+﻿@model List<OxyProcess.Models.FormTag.TagFormDataEntryViewModel>
+@{
+    ViewData["Title"] = "RegulerFormEntries";
+}
+
+
+@section Styles{
+    <link rel='stylesheet' href='https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css'>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+
+
+
+        label.label-class input, label.label-class span {
+            display: inline-block;
+            /* margin: 0; */
+        }
+
+        label.label-class input {
+            top: 2px;
+            position: absolute;
+        }
+
+        label.label-class {
+            position: relative;
+            margin: 0 0 13px;
+        }
+
+            label.label-class span {
+                margin: 0 28px 0;
+            }
+
+        .tbl-list .table td {
+            text-align: left;
+        }
+
+            .tbl-list .table td:last-child {
+                text-align: right;
+            }
+
+        .tbl-list .table {
+            border: 1px solid #dee2e6;
+                table-layout: fixed;
+
+        }
+
+            .headerfirst {
+            font-weight: 700;
+            color: #5c4ac7;
+            text-align: center;
+            font-size: 22px;
+            text-transform: uppercase;
+        }
+        .headerfirst{
+
+            display: inline;
+        }
+        .heading-tagnumber{
+
+     
+    display: inline !important;
+        }
+
+        .heading{
+
+            text-align: center;
+            position:relative;
+
+        }
+      
+    </style>
+
+}
+
+<div class="container-fluid justify-content-center mainview" >
+    <!-- Start Page Content -->
+
+
+
+    <div class="row" id="editsingleitem">
+        <!-- Column -->
+        <div class="col-md-6 col-sm-12  class-ad">
+            <div class="detail-user">
+                <div class="card">
+                    <div class="card-body">
+                        <div class=" row">
+                            <div class="col-md-12 " style="background-color:#e7efff">
+                                <div class="headerfirst">  TAG ID : <span class="heading-tagnumber">@Model.Select(e => e.TagNumber).Take(1).ElementAtOrDefault(0)</span></div>
+                            </div>
+                            <div class="col-md-12">
+                                <h2 class="heading">@Model.Select(e => e.FormName).Take(1).ElementAtOrDefault(0) </h2>
+                                <div class="text-center">
+                                   @if (Model.Select(e => e.WritePermission).Take(1).ElementAtOrDefault(0) == true)
+                                   {
+                                    <button class="btn btn-profile btn-primary btn-flat m-b-30 m-t-30 " onclick="window.location.replace('NewFormDataForReguler?TemplateUniqueId='+@Model.Select(e => e.TemplateuniqueId).Take(1).ElementAtOrDefault(0)+'&returnSearchTag='+'@Model.Select(e => e.TagNumber).Take(1).ElementAtOrDefault(0)')" type="submit">Add Entry</button>
+                                   }
+                                    <div class="tbl-list">
+                                        <table class="table" border="1">
+
+                                            <tr>
+                                                @*<th>Title</th>*@
+                                                <th>Date</th>
+                                                <th>Action</th>
+                                            </tr>
+
+                                            @{
+                                                foreach (var d in Model)
+                                                {
+                                                    if (d.CreatedDate != null)
+                                                    {
+                                                        <tr>
+                                                            @*<td>@d.Title</td>*@
+                                                            <td>@d.CreatedDate</td>
+                                                            <td><a title='Manage Tag' data-toggle='tooltip' class='tooltip-top  fa fa-arrow-right' onclick="window.location.replace('EditViewFormDataForReguler?TemplateUniqueId='+@d.TemplateuniqueId+'&returnSearchTag='+'@d.TagNumber'+'&DataEntryId='+'@d.Id' );"></a></td>
+                                                        </tr>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                            <td colspan="2"><h2 style="text-align:center;font-size: initial;">No entries exists.</h2></td>
+                                                        </tr>
+
+                                                    }
+
+
+
+                                                }
+                                            }
+
+
+
+
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+
+
+                                <div class="cov-da">
+                                    <div class="">
+                                        @*<div class="form-group  col-md-12 col-sm-12 col-xs-12">
+                                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                            </div>*@
+
+
+
+                                        <div class=" inputshow">
+
+
+                                        </div>
+
+                                        <input type="hidden" name="HiddenData" id="HiddenData" value="" />
+                                      
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group col-sm-12 col-xs-12" id="Submitdynamic">
+
+                                </div>
+                                <div class="form-group col-sm-12 col-xs-12" style="text-align: center;">
+                                    <button class="btn btn-profile btn-primary btn-flat m-b-30 m-t-30 " type="button" onclick=" window.location.replace('@Url.Action("TagReportCardList","FormTag",new { SearchTag = Model.Select(e=>e.TagNumber).Take(1).ElementAtOrDefault(0) })')">Back</button>
+
+                                </div>
+
+
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <!-- Column -->
+
+    </div>
+</div>
+
+
+@section Scripts{
+    <!-- Scripts -->
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js'></script>
+
+    <script src='https://code.jquery.com/ui/1.11.4/jquery-ui.js'></script>
+
+    <script src='https://rawgit.com/digitalBush/jquery.maskedinput/master/dist/jquery.maskedinput.min.js'></script>
+
+
+  
+
+}

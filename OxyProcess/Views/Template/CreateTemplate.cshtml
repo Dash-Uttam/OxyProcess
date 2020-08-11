@@ -1,0 +1,632 @@
+﻿@using OxyProcess.Models.Group
+@model OxyProcess.Models.Template.Template
+@using System.Collections;
+@using Newtonsoft.Json;
+@{
+    ViewData["Title"] = "CreateTemplate";
+}
+
+@section Styles {
+
+    <style>
+
+        .header {
+            position: absolute;
+        }
+
+        .error {
+            color: #F00;
+            background-color: #FFF;
+        }
+
+        .form-wrap.form-builder .frmb li {
+            background-color: #9688ef33 !important;
+        }
+
+        #output {
+            padding: 20px;
+            background: #dadada;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        select {
+            width: 300px;
+        }
+
+
+        .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+            height: 33px !important;
+        }
+
+        .add-field {
+            background-color: #9688ef33 !important;
+            padding: 15px 15px;
+            border-radius: 3px;
+            max-width: 944px;
+            width: 100%;
+        }
+
+            .add-field:hover {
+                border-color: #66afe9;
+                outline: 0;
+                box-shadow: inset 0 1px 1px rgba(0,0,0,0.1), 0 0 8px rgba(102,175,233,0.6);
+            }
+
+
+        .wrap-cover {
+            border: 1px solid #ccc;
+            padding: 23px;
+            margin: 20px 0 0;
+        }
+
+        .add-field .form-control {
+            height: 34px;
+            display: block;
+            width: 100%;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            border-radius: 4px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+        }
+
+        .wrap-cover #build-wrap {
+            border: 0;
+            padding: 0;
+            margin: 0;
+        }
+
+
+
+
+        /*remove fileds placeholder from date and fileupload*/ 
+        .file-field > .frm-holder > .form-elements > .placeholder-wrap {
+            display: none !important;
+        }
+
+
+        .date-field > .frm-holder > .form-elements > .placeholder-wrap {
+            display: none !important;
+        }
+
+        .card-cuss label {
+            width: auto;
+        }
+
+        ol.erroralert{
+            text-align:left;
+
+
+        }
+            ol.erroralert li {
+                list-style-type: circle;
+                margin: 7px 0 0 0;
+                font-size: 15px;
+            }
+
+
+    </style>
+
+
+
+
+
+
+}
+
+
+<div class="container-fluid">
+    <!-- Start Page Content -->
+    <div class="row">
+        <!-- Column -->
+
+        <div class="col-lg-12">
+            <div class="card card-cuss">
+                <h2 class="heading">Manage Template</h2>
+                @using (Html.BeginForm("CreateEditTemplate", "Template", FormMethod.Post, new { @id = "template-form" }))
+                {
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row crt-f">
+                        <div class="form-group col-md-4 col-sm-6 col-xs-12">
+                            <label>Template Name: </label>
+                            @if (Model == null)
+                            {
+                                <input asp-for="TemplateName" type="text" placeholder="Enter Template Name" name="templatename" id="templatename" class="form-control">
+                            }
+                            else
+                            {
+                                <input asp-for="TemplateName" type="text" placeholder="Enter Template Name" name="templatename" id="templatename" class="form-control" disabled>
+
+
+                            }
+                            <span id="templateName-error" asp-validation-for="TemplateName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-6 col-xs-12">
+                            <label>Type: </label>
+                            @{
+                                if (Model == null)
+                                {
+                                    @Html.DropDownList("temptype", (IEnumerable<SelectListItem>
+                               )ViewBag.TemplateType, new { @class = "form-control" })}
+                         
+                            else{
+                            @Html.DropDownList("temptype", (IEnumerable<SelectListItem>
+                              )ViewBag.TemplateType, new { @class = "form-control", disabled = "disabled" })}
+
+                            }
+
+                        </div>
+                        <div class="form-group col-md-4 col-sm-6 col-xs-12">
+                            <label>Permission: </label>
+                            <select name="chosenselect" data-placeholder="Manage Group Permission" multiple class="chosen-select form-control" required>
+                                @{
+                                    List<Groups> gp = (List<Groups>)ViewData["Groups"];
+                                    <option value="0" style="background-color:#f9c2ca42">Public Form</option>
+                                    foreach (var data in gp)
+                                    {
+                                        <option value="@data.GroupId">@data.GroupName</option>
+                                    }
+                                }
+                            </select>
+                            <span id="groups-error" asp-validation-for="Groups" class="text-danger"></span>
+                        </div>
+                        @*<div class="form-group col-md-4 col-sm-6 col-xs-12">
+                                <label>Template Title: </label>
+                                <input id="TemplateTitle" type="text" placeholder="Enter Template Title" name="TemplateTitle" class="form-control">
+                                <span id="TemplateTitle-error"  class="text-danger"></span>
+                            </div>*@
+                    </div>
+                    <div class="card-body">
+
+                        <span asp-validation-for="TemplateCode" class="text-danger" id="template-error"></span>
+                        <!-- partial:index.partial.html -->
+
+                        <div class="wrap-cover">
+                            @*<div class="form-group col-md-12 add-field " id="title-field">
+                                <label>Title </label>
+                                <input type="text" placeholder="Enter Title" name="Titlename" id="Titlename" class="form-control" data-val="true" data-val-required="The Title field is required." value="">
+                                <span id="Titlename-error" class="text-danger field-validation-valid" data-valmsg-for="Titlename" data-valmsg-replace="true"></span>
+                            </div>*@
+                            <div id="build-wrap"></div>
+                        </div>
+
+                        <!-- partial -->
+                    </div>
+                    <div class="text-right btn-n">
+                        @if (Model != null)
+                        {
+                            <a href="@Url.Action("ViewTemplate","Template",new { Templateid = Model.TemplateId })" id="ViewTemplate" class="btn btn-primary btn-flat">View</a>
+                        }
+                        <a href="#" id="submitform" class="btn btn-primary btn-flat">Save</a>
+                    </div>
+
+                }
+            </div>
+            <!-- Column -->
+        </div>
+        <!-- End PAge Content -->
+    </div>
+
+</div>
+@section Scripts {
+
+    <script src="~/js/JqueryUI_1_11_2.js"></script>
+    <script src="~/js/lib/Form-builder/Form-Builder.js"></script>
+
+    <script>
+            //load form builder
+              $(document).ready(function () {
+                LoadDynamicDropDrag();
+            });
+
+            //on template change dropdown change
+            $(function() {
+                $("#temptype").change(function () {
+                    if (this.value == "2") {
+
+                        $("#title-field").hide();
+
+                    }
+                    else {
+
+                        $("#title-field").show();
+                    }
+
+    });
+});
+
+            var formBuilder = "";
+            function LoadDynamicDropDrag() {
+
+
+                function setOptionValue(evt) {
+                    //evt.target.nextSibling.value = evt.target.value;
+                    
+                }
+                function applyOptionChanges(option) {
+                    option.removeEventListener("input", setOptionValue, false);
+                    option.addEventListener("input", setOptionValue, false);
+                    option.nextSibling.value = option.nextSibling.value.includes("option") === true ? "" : option.nextSibling.value;
+                    option.nextSibling.value = option.nextSibling.value === ""?Math.floor(Math.random() * 900000000000) + 100000000000 : option.nextSibling.value ;
+                     option.nextSibling.style.display = "none";
+                    option.placeholder = "Label / Value";
+
+                }
+                function selectOptions(fld) {
+                    const optionLabelInputs = fld.querySelectorAll(".option-label");
+                    for (i = 0; i < optionLabelInputs.length; i++) {
+                        applyOptionChanges(optionLabelInputs[i]);
+                    }
+                }
+                function createObserver(fld) {
+                    const callback = function (mutationsList) {
+                        for (var mutation of mutationsList) {
+                            selectOptions(fld);
+                        }
+                    };
+                    const observer = new MutationObserver(callback);
+                    observer.observe(fld.querySelector(".sortable-options"), { childList: true });
+                    return observer
+                }
+                function onAddOptionInput(fld) {
+                    selectOptions(fld);
+                    const observer = createObserver(fld);
+                    console.log(observer)
+                }
+
+                $(".chosen-select").chosen('destroy').val(@Json.Serialize(ViewData["SeletedGroupsList"])).chosen();
+                $(".chosen-select").on('change', function (e,p) {
+
+
+                    var groups = $(".chosen-select").chosen().val();
+
+                    if (jQuery.inArray("0", groups) === 0) {
+
+                        if (p.selected !== "0") {
+                         
+
+                            $('.chosen-select option[value="0"]').prop('selected', false).trigger('chosen:updated');
+
+                          
+                            $(".chosen-select").trigger("chosen:updated"); 
+
+                        }
+
+                        if (p.selected === "0") {
+
+                            $(".chosen-select").val('').trigger("chosen:updated");
+                            $(".chosen-select").val(0).trigger("chosen:updated");
+
+                           
+                        }
+
+                    };
+
+
+                    $('#groups-error').html('');
+                });
+
+                $('#templateName-error').html('');
+                $('#groups-error').html('');
+                $('#template-error').html('');
+
+                jQuery($ => {
+
+                    const fbTemplate = document.getElementById('build-wrap');
+                    var options = {
+                        disableFields: [
+                            'button', 'autocomplete', 'hidden', 'paragraph'
+
+                        ],
+                        disabledActionButtons: ['data', 'save'],
+                        disabledAttrs: ['className', 'name', 'value', 'access', 'other', 'subtype', 'toggle', 'inline','step'],
+                        typeUserEvents: {
+                            "checkbox-group": {
+                                onadd: onAddOptionInput
+                            },
+                            "radio-group": {
+                                onadd: onAddOptionInput
+                            },
+                            select: {
+                                onadd: onAddOptionInput
+                            }
+                        },
+                        onOpenFieldEdit: function (editPanel) {
+                            $(".select-field > .frm-holder > .form-elements > .multiple-wrap").css("display", "none");
+                        },
+                    };
+
+                    const originalFormData =  @Html.Raw(Model == null ? "'Null'" : Model.TemplateCode);
+                    if (originalFormData !== 'Null') {
+
+                        @{
+                            object temptypse  = "Null";
+                            if (Model != null)
+                            {
+                                 temptypse = Model.TemplateType.TypeId;
+
+                            }
+            }
+                          if (@temptypse == 1) {
+                              $("#title-field").show();
+                        }
+
+                        if (@temptypse == 2) {
+                              $("#title-field").hide();
+                        }
+
+
+                            var formData = JSON.stringify(originalFormData);
+                            formBuilder = $(fbTemplate).formBuilder(options);
+                            formBuilder.promise.then(function (fb) {
+                                formBuilder.actions.setData(formData);
+                            });
+                          } else {
+                        formBuilder = $(fbTemplate).formBuilder(options);
+                      }
+                });
+            }
+
+
+
+    $(document).ready(function () {
+                                document.getElementById('submitform').addEventListener('click', function () {
+                                        if (validateTemplatete()) {
+                                        var groups = $(".chosen-select").chosen().val();
+                                        var groupsstring = groups.toString();
+                                        validateTemplatete(groupsstring);
+
+                                        if (jQuery.inArray("0", groups) === 0) {
+
+                                            groupsstring = "0";
+
+
+                                        }
+                                        var TemplateType = $('#temptype :selected').val();
+                                        var jdata = formBuilder.actions.getData('json');
+                                            var fixempty = JSON.parse(jdata);
+                                            var TempID = @Html.Raw(Model == null ? "'0'" : @Model.TemplateId.ToString());
+
+                                            var rendnum = Math.floor(Math.random() * 900000000000) + 100000000000;
+                                            // if template is reguler add title as first field
+                                           //if (TemplateType == 1 && TempID <= 0) {
+                                           //     fixempty.unshift({
+                                           //         label: "Title",
+                                           //         placeholder: "Enter Title",
+                                           //         name: "title-"+rendnum,
+                                           //         type: "customtitle",
+                                           //         required: true,
+                                           //         value: ""
+                                           //     })
+                                           // }
+
+                                            var errortemp = [];
+                                            $(fixempty).each(function (index) {
+
+                                                if (fixempty[index].type == "checkbox-group" ||fixempty[index].type ==  "radio-group" || fixempty[index].type == "select") {
+
+
+                                                    $(fixempty[index].values).each(function (indexno) {
+
+                                                        if (fixempty[index].values[indexno].label == "") {
+
+                                                            if (fixempty[index].type == "checkbox-group") {
+//                                                                var rendomname=  "new-checkbox-"+ Math.floor(Math.random()*90000);
+//                                                                fixempty[index].values[indexno].label =rendomname
+//;
+                                                                //   fixempty[index].values[indexno].value = rendomname;
+
+                                                                errortemp.push("Checkbox "+fixempty[index].label)
+
+
+                                                            }
+
+                                                            if (fixempty[index].type == "radio-group") {
+                                                                //  var rendomname=  "new-radio-"+ Math.floor(Math.random()*90000);
+                                                                //fixempty[index].values[indexno].label = rendomname;
+                                                                //fixempty[index].values[indexno].value = rendomname;
+
+                                                                errortemp.push("Radio "+fixempty[index].label)
+
+                                                            }
+
+                                                            if (fixempty[index].type == "select") {
+                                                                //var rendomname=  "new-select"+ Math.floor(Math.random()*90000);
+                                                                //fixempty[index].values[indexno].label = rendomname;
+                                                                //fixempty[index].values[indexno].value = rendomname;
+
+                                                                errortemp.push("Select "+fixempty[index].label)
+                                                            }
+
+                                                           
+                                                        }
+
+                                                    })
+
+                                                }
+
+                                            })
+
+
+
+                                            function unique(list) { return $.grep(list, function (n, i) { return list.indexOf(n) == i; }); }
+                                            var sorttemperror = unique(errortemp);
+                                          
+                                            //validate template inside 
+                                            if (sorttemperror.length !== 0) {
+
+                                                var errortext = "<ol class='erroralert'>";
+                                                var repeattext = "";
+                                                $.each(sorttemperror, function (i, error) {
+                                                   
+                                                    if (this !== repeattext) {
+                                                        errortext = errortext + "<li>" + this + " options cannot be empty.</li>";
+                                                        repeattext = this;
+                                                    }
+                                                });
+                                                errortext = errortext+ "</ol>"
+                                                
+                                                   
+
+                                                swal({
+                                                    title: "<lable>Template Create</lable>",
+                                                    html: errortext,
+
+                                                },
+                                                  
+                                                );
+
+                                                return false;
+
+                                            }
+
+
+                                          jdata =  JSON.stringify(fixempty);
+                                        var dataToSend = {
+                            'TemplateCode': jdata,
+                            'Groups': groupsstring,
+                            'TemplateTypeId': TemplateType,
+                            'TemplateId': TempID,
+                            'TemplateName': $('#templatename').val(),
+                            'CreatedDate' : moment.utc().format('YYYY-MM-DD HH:mm:ss')
+                        };
+                        $.ajax({
+                            url: '@Url.Action("CreateEditTemplate", "Template")',
+                            dataType: 'json',
+                            type: "POST",
+                            data: dataToSend,
+                            success: function (result) {
+                                            //msg = JSON.parse(result);
+                                            //console.log(msgs);
+                                if (result.message === 'Sucess') {
+
+                                      window.location.href = "/Template/ViewTemplate/" + result.templateid;
+
+                                    }
+                                            else {
+                                                swal({
+
+                                                    text: result.message,
+                                        type: "warning",
+                                        showCancelButton: false,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                    });
+                                @*window.location.href = '@Url.Action("Index","Template")';*@
+                                }
+                            },
+                            error: function (result) {
+                                window.location.href = '@Url.Action("Index","Template")';
+                            }
+                        });
+                        return false;
+                }
+            });
+    });
+
+    function validateTemplatete() {
+        var count = 0;
+        $('#templateName-error').html('');
+        $('#groups-error').html('');
+        $('#template-error').html('');
+
+        if ($("#templatename").val().trim() === "") {
+            count = count + 1;
+            $('#templateName-error').html('Template Name is required');
+            $("#templatename").focus();
+            return 0;
+        }
+
+        if ($("#templatename").val().trim().length  >=  120) {
+            count = count + 1;
+            $('#templateName-error').html('Template name too long more than(120) characters'); 
+            $("#templatename").focus();
+            return 0;
+        }
+
+        var Group = $(".chosen-select").chosen().val();
+        if (Group.toString() === "") {
+            count = count + 1;
+            $('#groups-error').html("Select group permission");
+            $(".chosen-select").focus();
+            return 0;
+        }
+        var jsonData = formBuilder.actions.getData()
+         var array = $.grep(jsonData, function(check) {
+              return (check.type == "header");
+            });
+
+        if (jsonData.length === 0) {
+            $('#template-error').html("Select field for template");
+            return 0;
+        }
+
+        if (array.length  === jsonData.length) {
+           
+            $('#template-error').html("Select fields for template. Header is not a field");
+            return 0;
+        }
+
+
+
+    //    if (jsonData.length === 1) {
+
+
+    //        var array = $.grep(jsonData, function(check) {
+    //return (check.type == "header");
+    //        });
+
+    //        if (array == 0) {
+    //            $('#template-error').html("Select fields for template. Header is not a field");
+    //            return 0;
+
+    //        }
+    //         return 0;
+    //        //if (jsonData[0].type === "header") {
+    //        //    $('#template-error').html("Select fields for template. Header is not a field");
+    //        //    return 0;
+    //        //}
+    //    }
+
+        if (count === 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+        };
+
+
+
+
+    </script>
+    @if (ViewData["TemplateNameAvailable"] != null)
+    {
+        @if (ViewData["TemplateNameAvailable"].ToString() == "true")
+        {
+            <script>
+
+                swal("TemplateName already available", "", "error");
+
+
+            </script>
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+}

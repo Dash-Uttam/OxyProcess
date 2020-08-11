@@ -1,0 +1,136 @@
+﻿@model OxyProcess.Models.GroupsViewModels.AddGroupViewModel
+@{
+    ViewData["Title"] = "Groups";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    <!-- Start Page Content -->
+
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class=" row">
+                        <div class="col-md-12">
+                            <h2 class="heading">Create Group</h2>
+                        </div>
+                    </div>
+                    <form asp-controller="Group" asp-action="Groups" id="Groups" method="post">
+                        <div class="row ">
+                            <div class="col-md-6 col-xs-12 col-sm-12 margin-auto">
+                                <div class="input-group input-group-default">
+
+                                    <input asp-for="GroupName" id="GroupName" name="GroupName" type="text" placeholder="Enter Group Name" class="form-control">
+                                    <span asp-validation-for="GroupName" class="text-danger"></span>
+                                    <span class="input-group-btn"><button class="btn btn-primary" type="submit">Add Group</button></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="hed-table">
+                                <h2 class="">List Of Group </h2>
+                            </div>
+                            <div class="table-responsive m-t-40 group-tabel">
+                                <table id="myTable" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>GroupName</th>
+
+                                        </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+
+    </div>
+
+    <!-- End PAge Content -->
+</div>
+@section Scripts{
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src='https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js'></script>
+
+    <script type="text/javascript">
+
+       
+
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetAllGroups","Group")",
+                "dataType": "json",
+                success: function (data) {
+                    datatableVariable = $('#myTable').DataTable({
+                         "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                        $('td', nRow).css('background-color', 'white');
+                },
+                        destroy: true,
+                        data: data,
+                        columns: [
+                            {
+                                'data': "GroupName",
+
+                                'render': function (data) {
+
+                                    return "<span class='limittext'>" + data + "</span>"
+                                }
+                            }
+                        ],
+                    });
+                }
+            });
+
+        });
+
+
+
+
+         $(function () {
+
+
+
+            $("#Groups").validate(
+                {
+
+                    onsubmit: false,//Disables form submit validation
+                    onfocusout: false, //Disables onblur validation.
+                    onkeyup: false,  //Disables onkeyup validation
+                    onclick: false, //Disables onclick validation of checkboxes and radio buttons.
+                    rules:
+                    {
+
+                        GroupName:
+                        {
+                            required: true,
+                        }
+                    },
+                    messages:
+                    {
+
+
+                        GroupName:
+                        {
+                            required: "Please enter firstName",
+
+                        },
+
+                    }
+
+                });
+        });
+    </script>
+}

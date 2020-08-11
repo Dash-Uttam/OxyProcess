@@ -1,0 +1,635 @@
+﻿@model OxyProcess.Models.GroupsViewModels.GroupMemberPermissionModel
+@{
+    ViewData["Title"] = "Groups permission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+@*<link rel="stylesheet" href="/resources/demos/style.css">*@
+<style>
+    #addMemberToGroupViewModel_Email {
+        width: 300px;
+        padding: 7px;
+        text-align: left;
+    }
+
+    .autocomplete-suggestions {
+        text-align: left;
+        border: 1px solid #999;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        background: #FFF;
+        overflow: auto;
+    }
+
+    .autocomplete-suggestion {
+        padding: 5px 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .autocomplete-selected {
+        background: #F0F0F0;
+    }
+
+    .autocomplete-suggestions strong {
+        font-weight: normal;
+        color: #3399FF;
+    }
+
+    .autocomplete-group {
+        padding: 2px 5px;
+    }
+
+        .autocomplete-group strong {
+            display: block;
+            border-bottom: 1px solid #000;
+        }
+
+
+    .ad-btns .btn {
+        padding: 8px 45px;
+        margin: 19px 4px 0;
+    }
+
+    .lblgrpname {
+        margin-top: 8px;
+        margin-right: 7px;
+    }
+</style>
+<div class="container-fluid">
+    <!-- Start Page Content -->
+
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class=" row">
+                        <div class="col-md-12">
+                            <h2 class="heading">Edit Group </h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 col-sm-12">
+                            <form>
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="input-group input-group-default">
+                                    <input asp-for="addMemberToGroupViewModel.GroupId" type="hidden" id="groupId" />
+                                    <input asp-for="addMemberToGroupViewModel.Email" type="text" placeholder="Customer/Worker Email address" class="form-control">
+                                    <span id="MemberName-error" asp-validation-for="addMemberToGroupViewModel.Email" class="text-danger"></span>
+                                    <span class="input-group-btn"><button class="btn btn-primary" type="button" id="addMemberToGroup">Add Member</button></span>
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-sm-12">
+                            <div class="input-group input-group-default">
+                                <span class="input-group-btn"><label class="lblgrpname">Group Name :</label></span>
+
+                                <input asp-for="GroupName" type="text" placeholder="Group Name" class="form-control">
+                                <span id="GroupName-error" asp-validation-for="GroupName" class="text-danger"></span>
+                                @*<span class="input-group-btn"><button class="btn btn-primary" id="editGroup" type="button">Save</button></span>*@
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="hed-table">
+                                <h2 class="">
+                                    Members of -
+                                    @if (@Model.GroupName != null || @Model.GroupName != "")
+                                    {
+                                        /**/
+                                        @Model.GroupName
+                                    }
+                                </h2>
+                            </div>
+                            <div class="table-responsive m-t-40 group-tabel">
+                                <table id="myTable" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>User Name</th>
+                                            @*
+                                                <th>GroupId</th>*@
+                                            <th>Action</th>
+
+                                        </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+
+    </div>
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2 class="">GROUP PERMISSION </h2>
+                            <form id="chkform">
+                                <div class="group-p">
+                                    <ul>
+                                        <li>
+                                            <strong>Permission :</strong>
+                                        </li>
+                                        <input type="hidden" asp-for="groupPermissionViewModel.GroupId" />
+                                        <li>
+                                            <div class="edi-cus">
+                                                <input type="checkbox" asp-for="groupPermissionViewModel.Read" class="require-one">
+                                                <label asp-for="groupPermissionViewModel.Read"> Read</label>
+                                            </div>
+
+                                        </li>
+                                        <li>
+                                            <div class="edi-cus">
+                                                <input type="checkbox" asp-for="groupPermissionViewModel.Write" class="require-one">
+                                                <label asp-for="groupPermissionViewModel.Write"> Write</label>
+                                            </div>
+
+                                        </li>
+                                        @*<li>
+                                                <div class="edi-cus">
+                                                    <input type="checkbox" asp-for="groupPermissionViewModel.Edit" class="require-one">
+                                                    <label asp-for="groupPermissionViewModel.Edit"> Edit</label>
+                                                </div>
+
+                                            </li>
+                                            <li>
+                                                <div class="edi-cus">
+                                                    <input type="checkbox" asp-for="groupPermissionViewModel.Delete" class="require-one">
+                                                    <label asp-for="groupPermissionViewModel.Delete"> Delete</label>
+                                                </div>
+
+                                            </li>*@
+                                        <li>
+                                            <div class="edi-cus">
+                                                <input type="checkbox" asp-for="groupPermissionViewModel.None" class="require-one">
+                                                <label asp-for="groupPermissionViewModel.None"> None</label>
+                                            </div>
+
+                                        </li>
+                                        @*<li>
+
+                                                <span class="input-group-btn"><button class="btn btn-primary" id="addEditPermission" type="button">Add Permission</button></span>
+
+                                            </li>*@
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ad-btns">
+                    <button class="pull-right btn btn-primary" onclick="window.location.replace('@Url.Action("Index","Group")');" type="button">Back</button>
+
+                    <button class="pull-right btn btn-primary" id="SaveGroup" type="button">Save</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @*<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>*@
+    <script src="~/js/lib/datatables/datatables.min.js"></script>
+    <script src="~/js/lib/form-validation/jquery.validate.min.js"></script>
+    @*<script src=' https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.js'></script>*@
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+            crossorigin="anonymous"></script>
+    @*<script src="~/js/JqueryUI_1_11_2.js"></script>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+             $('.require-one').change(function () {
+                 if (this.checked) {
+                   var id= this.id;
+                     if (id == "groupPermissionViewModel_None") {
+                         $("#groupPermissionViewModel_Read").prop("checked", false);
+                         $("#groupPermissionViewModel_Write").prop("checked", false);
+                         $("#groupPermissionViewModel_Edit").prop("checked", false);
+                         $("#groupPermissionViewModel_Delete").prop("checked", false);
+
+                     }
+                     else if (id == "groupPermissionViewModel_Write") {
+
+                         $("#groupPermissionViewModel_Read").prop("checked", true);
+                           $("#groupPermissionViewModel_None").prop("checked", false);
+                     }
+
+                     else {
+
+
+                         $("#groupPermissionViewModel_None").prop("checked", false);
+                     }
+
+
+                 }
+
+                 if (!this.checked) {
+                     var id = this.id;
+                     var ischkd = $('input:checkbox').is(':checked');
+                     if (id == "groupPermissionViewModel_Read" && ischkd) {
+
+
+                          $("#groupPermissionViewModel_Write").prop("checked", false);
+                     }
+                 }
+    });
+
+
+
+              var grpid = $("#groupId").val();
+
+            //This function is for getAllUserGroupWise
+            //start getting all user group wise
+             $.ajax({
+                type: "GET",
+                url: "@Url.Action("getAllUserGroupWise", "Group")",
+                    data: {
+                     GroupId:grpid
+                     },
+                "dataType": "json",
+                    success: function (data) {
+
+                        datatableVariable = $('#myTable').DataTable({
+                         "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                        $('td', nRow).css('background-color', 'white');
+                            },
+
+                              'columnDefs': [{
+
+
+        'targets': [1], // column index (start from 0)
+        'orderable': false, // set orderable false for selected columns
+                        }, {
+
+
+                            }],
+                        destroy: true,
+                        data: data,
+                        columns: [
+
+                            {
+                                'data': "User",
+                                'render': function (data) {
+
+                                    return "<span class='limittext'>" + data.Email + "</span>"
+                                }
+                            },
+                            // {
+                            //    'data': "GroupId",
+                            //    'render': function (data) {
+
+                            //        return "<span class='limittext'>" + data + "</span>"
+                            //    }
+                            //},
+                            {
+                                'data':"GroupMemberId",
+                                "render": function (data) {
+
+                                    return "<a title='Delete' data-toggle='tooltip' id='" + data + "'  class='tooltip-top fa fa-trash-o' onclick=\'DeleteRow(" + data + ")\'></a>";
+                                }
+                            }
+                        ]
+                    });
+                }
+            });
+
+
+
+              
+
+           $('#editGroup').on( "click", function() {
+                if (validateGroupName()) {
+                   $.ajax({
+                    type: "Post",
+                    url: "@Url.Action("EditGroup", "Group")",
+                    data: {
+                        GroupId: grpid,
+                        newgroupName: $('#GroupName').val()
+                    },
+                       success: function (response) {
+                           if (response.value === true && response.message === "Ok") {
+                               swal({
+                                   text: 'Group Name updated Successfully',
+                                   type: 'success',
+                                   confirmButtonText: 'Ok',
+                               }).then(function () {
+                                   location.reload(true);
+                               });
+                           }
+                           else if(response.value === true && response.message !== "Ok") {
+
+
+                               swal({
+                                   text: response.message,
+                               type: 'warning',
+                               confirmButtonText: 'Ok',
+                               })
+                           }
+                           else {
+
+                               swal({
+                                   text: response.message,
+                                   type: 'error',
+                                   confirmButtonText: 'Ok',
+                               })
+                           }
+                    },
+                    error: function () {
+                        alert("Error in Ajax");
+                        location.reload(true);
+                    }
+
+                });
+              }
+           });
+
+
+            //This function is for add add member to group
+            //start add member to group
+            $('#addMemberToGroup').on("click", function () {
+                if (validateAddMember($.trim($('#addMemberToGroupViewModel_Email').val()))) {
+                    var model = new Object();
+                    model.addMemberToGroupViewModel = new Object();
+                    model.addMemberToGroupViewModel.GroupId = grpid;
+                    model.addMemberToGroupViewModel.Email = $.trim($('#addMemberToGroupViewModel_Email').val());
+                   $.ajax({
+                    type: "Post",
+                       url: "@Url.Action("AddMemberToGroup", "Group")",
+                       data: model,
+                       success: function (response) {
+                           if (response.success == true) {
+                               if (response.inserrtSuccess == true) {
+                                   //swal({
+                                   //    text: response.message,
+                                   //    type: 'success',
+                                   //    confirmButtonText: 'Ok',
+                                   //}).then(function () {
+                                   //    location.reload(true);
+                                   //});
+
+                                   $('#myTable').DataTable().row.add({
+                                       "User": { "Email": response.email }, "GroupMemberId": Math.floor(Math.random() * 899999 + 100000) }
+                                   ).draw();
+
+
+
+
+
+
+
+                               }
+                               if (response.notFound == true) {
+                                   swal(response.message, "", "error");
+                               }
+                               if (response.userAvailable  == true) {
+                                   swal(response.message, "", "info");
+                               }
+                               if (response.emailRequired == true) {
+                                   swal(response.message, "", "error");
+                               }
+                           } else {
+                               swal(response.message, "", "error");
+                           }
+                    },
+                    error: function () {
+                        swal(response.message, "", "error");
+                        location.reload(true);
+                    }
+
+                });
+              }
+            });
+            //start add member to group
+
+
+             //Start Loading data for automapper
+                $("#addMemberToGroupViewModel_Email").autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "@Url.Action("GroupsMembers", "Group")",
+                            type: "Get",
+                            dataType: "json",
+                            data: {term: request.term  },
+                            success: function (data) {
+                                response($.map(data, function (data) {
+                                    return { label: data.email, value: data.email };
+                                }))
+                            }
+                        })
+                    },
+                    messages: {
+                        noResults: "", results: ""
+                    }
+
+                });
+             //End Loading data for automapper
+
+        });
+      function isaddpermision(){
+           var selectedbtn=$('.require-one:checked');
+             if(selectedbtn.length>0)
+             {
+               return true
+             }
+             else
+             {
+             return false
+            }
+        }
+
+//harsh add
+
+
+
+
+    $('#SaveGroup').on("click", function () {
+
+
+
+
+        var data = $('#myTable').DataTable().rows().data(); //fatch data from datatable list
+        var MemberList = [];
+        data.each(function (item, index) {
+            MemberList.push(item.User.Email);
+        });
+
+
+
+        var model = new Object();
+        model.GroupId = $("#groupId").val();
+        model.GroupMemberList = MemberList.toString();
+        model.GroupName = $('#GroupName').val();
+
+
+        model.GroupPermission = new Object();
+
+        model.GroupPermission.Read = $('#groupPermissionViewModel_Read').is(":checked");
+        model.GroupPermission.Write = $('#groupPermissionViewModel_Write').is(":checked");
+        model.GroupPermission.Edit = $('#groupPermissionViewModel_Edit').is(":checked");
+        model.GroupPermission.Delete = $('#groupPermissionViewModel_Delete').is(":checked");
+        model.GroupPermission.None = $('#groupPermissionViewModel_None').is(":checked");
+
+        if (validateGroupName() === false) {
+
+            return false; 
+
+        }
+
+
+                   $.ajax({
+                    type: "Post",
+                    url: "@Url.Action("SaveGroupChanges", "Group")",
+                    data: {
+                        groupChanges: model
+                    },
+                       success: function (response) {
+                           if (response.success === true) {
+                               swal({
+                                   text: 'Group updated successfully',
+                                   type: 'success',
+                                   confirmButtonText: 'Ok',
+                               }).then(function () {
+                                   location.reload(true);
+                               });
+                           }
+                       
+                           else {
+
+                               swal({
+                                   text: response.message,
+                                   type: 'error',
+                                   confirmButtonText: 'Ok',
+                               })
+                           }
+                    },
+                    error: function () {
+                        alert("Error in Ajax");
+                        location.reload(true);
+                    }
+
+                });
+
+           });
+
+
+
+
+
+
+
+       function DeleteRow(ids) {
+            //var grpid = $("#groupId").val();
+            swal({
+                title: 'Are you sure?',
+                text: 'You will not be able to recover this group member!',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then(function (dismiss) {
+                if (dismiss.dismiss === 'cancel') {
+
+                } else {
+                    $('#myTable').DataTable().row($('#'+ids).parents('tr')).remove().draw();
+
+                }
+            });
+        }
+
+        function validateGroupName() {
+            var error = true;
+            $('#GroupName-error').html('');
+            if ($("#GroupName").val().trim() === "") {
+                    swal({
+                   text: 'GroupName must be required.',
+                      type: 'error',
+                   confirmButtonText: 'Ok',
+                    }).then(function () {
+                        //location.reload(true);
+                    });
+                error = false;
+         }
+
+         if ($("#GroupName").val().length >= 32) {
+
+
+
+                 swal({
+                     text: 'Group name is too long.',
+                     type: 'error',
+                     confirmButtonText: 'Ok',
+                 }).then(function () {
+                     //location.reload(true);
+                 });
+             error = false;
+
+         }
+            if (error === false) {
+                return false;
+            }
+    }
+
+     function validateAddMember(Email) {
+       
+         $('#MemberName-error').html('');
+
+         var Error = true;
+         if (Email.trim() === "") {
+            swal({
+                text: 'Member email must be required.',
+                type: 'error',
+                confirmButtonText: 'Ok',
+            }).then(function () {
+                //location.reload(true);
+            });
+             Error = false;
+         }
+
+
+         var data = $('#myTable').DataTable().rows().data(); //fatch data from datatable list
+        
+         data.each(function (item, index) {
+             if (item.User.Email.trim() == Email) {
+                 swal({
+                     text: 'Member email already exist in list.',
+                     type: 'error',
+                     confirmButtonText: 'Ok',
+                 }).then(function () {
+                     //location.reload(true);
+                 });
+                 Error = false;
+             }
+         });
+
+         return Error;
+         
+    }
+
+    </script>
+
+
+}
+

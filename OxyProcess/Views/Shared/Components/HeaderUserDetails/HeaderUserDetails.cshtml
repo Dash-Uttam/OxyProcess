@@ -1,0 +1,95 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@model ApplicationUser
+@using System.Security.Claims
+<style>
+    .u-header {
+        margin-right: 23px;
+    }
+
+    .cus-row, .btn-log {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .cus-row {
+        padding: 13px 19px 13px 0;
+    }
+
+    .text-nowrap label {
+        margin: 0;
+    }
+
+    .btn-log button {
+        font-size: 13px;
+        padding: 5px 11px;
+    }
+
+        .btn-log button i {
+            padding: 0 4px 0 0;
+        }
+
+    .text-nowrap strong {
+        color: #000;
+        padding: 0 7px 0 0;
+    }
+</style>
+<div class="header">
+    <nav class="navbar top-navbar navbar-expand-md navbar-light">
+        <!-- Logo -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="@Url.Action("Index","Home")">
+                <!-- Logo icon -->
+                <b>OXY PROCESS @*<span class="User-Role"> @User.FindFirst(ClaimTypes.Role).Value</span>*@</b>
+                <!--End Logo icon -->
+                <!-- Logo text -->
+
+            </a>
+        </div>
+        <!-- End Logo -->
+        <div class="navbar-collapse">
+            <!-- toggle and nav items -->
+            <ul class="navbar-nav mr-auto mt-md-0">
+                <!-- This is  -->
+                <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted" href="javascript:void(0)"><i class="mdi mdi-menu"></i></a> </li>
+
+                <!-- Search -->
+            </ul>
+
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <div class="pull-right u-header">
+                    <div class="cus-row">
+                        <div class=" text-nowrap">
+                            @*<label for="CurrentUser"><strong>Current User:</strong></label>*@
+                            <span class="text-nowrap">@Model.FirstName @Model.LastName [@User.FindFirst(ClaimTypes.Role).Value]</span>
+                        </div>
+                        <div class=" text-nowrap">
+                            @*<label for="CompanyName"><strong>Company Name:</strong></label>*@
+                            @if(Model != null && Model.CompanyName != "")
+                            {
+                                <sapn class=" text-nowrap comp-name">@Model.CompanyName</sapn>
+                            }
+                            else
+                            {
+                                <sapn class=" text-nowrap comp-name"></sapn>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="btn-log">
+                        <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="btn btn-primary "><i class="fa fa-sign-out"></i>Log out </button>
+                        </form>
+                    </div>
+                </div>
+            }
+            else
+            {
+                string authfail = Url.Action("Login", "Account");
+                Context.Response.Redirect(authfail);
+            }
+        </div>
+    </nav>
+</div>
+

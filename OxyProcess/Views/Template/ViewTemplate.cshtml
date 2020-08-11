@@ -1,0 +1,532 @@
+﻿@model OxyProcess.Models.Template.Template
+@{
+    ViewData["Title"] = "ViewTemplate";
+}
+
+
+
+
+
+@section Styles{
+    <link rel='stylesheet' href='https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css'>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+
+        .editable-clear-x {
+            position: absolute !important;
+        }
+
+        .editable-submit, .editable-cancel {
+            width: 50px !important;
+            margin: 0px 0px 0 8px !important;
+        }
+
+        .editable-click, a.editable-click, a.editable-click:hover {
+            text-decoration: none;
+            border-bottom: none 1px #0088cc;
+        }
+
+        .company-detail label {
+            display: block;
+        }
+
+        .company-detail span {
+            position: relative;
+            display: block;
+        }
+
+        .modal-body select {
+            height: 33px !important;
+        }
+
+
+        .autocomplete-suggestions {
+            text-align: left;
+            border: 1px solid #999;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+            background: #FFF;
+            overflow: auto;
+        }
+
+        .autocomplete-suggestion {
+            padding: 5px 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .autocomplete-selected {
+            background: #F0F0F0;
+        }
+
+        .autocomplete-suggestions strong {
+            font-weight: normal;
+            color: #3399FF;
+        }
+
+        .autocomplete-group {
+            padding: 2px 5px;
+        }
+
+            .autocomplete-group strong {
+                display: block;
+                border-bottom: 1px solid #000;
+            }
+
+        #myModal .modal-dialog {
+            position: unset;
+            margin: 7.75rem auto;
+        }
+
+        .btn-comp {
+            width: 131px !important;
+        }
+
+        .cov-d {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .cov-d {
+            width: 100%;
+            margin: 0 auto;
+            max-width: 311px;
+        }
+
+        .heading {
+            text-align: center;
+        }
+
+        .detail-user label {
+            color: #000;
+        }
+
+        .form-group.col-md-12 {
+            border-bottom: 1px solid #eee;
+            padding: 9px 0;
+        }
+
+        .cov-da {
+            max-width: 393px;
+            margin: 0 auto;
+        }
+
+            .cov-da input {
+                /* width: 22px; */
+                margin: 0 4px -8px 0;
+                /* font-size: 20px; */
+                /* font: 400 18.3333px Arial; */
+                border: 0px;
+                width: 22px;
+                height: 19px;
+            }
+
+        .inputshow h2 {
+            font-weight: 600;
+            color: #000;
+        }
+
+        .inputshow label {
+            color: #000;
+            font-weight: 400;
+        }
+
+        .form-group.inputshow span {
+            display: inline-block;
+            margin: -8px 0 -3px;
+            position: relative;
+            top: -4px;
+        }
+
+        input.form-control {
+            width: 100%;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            height: 40px;
+        }
+        /*field csss*/
+        .datepicker {
+            width: 180px;
+            margin: 0 20px 20px 20px;
+        }
+
+            .datepicker > span:hover {
+                cursor: pointer;
+            }
+
+        .fileslistinside {
+            text-align: center;
+            border: blueviolet;
+            margin: 0px 0px -8px 0px;
+            padding: 1px 0px 20px 0px;
+            border-style: dotted;
+        }
+
+            .fileslistinside span {
+                padding: 0px 0px 0px 24px;
+                margin-top: 11px;
+                text-align: initial;
+            }
+
+        .iconspaceleft {
+            padding: 0 0 0 6px;
+        }
+
+
+
+        .inputshow input, .inputshow select {
+            margin: 0 0 19px;
+        }
+
+        .inputshow label {
+            font-size: 15px;
+            margin: 0 0 4px;
+            font-weight: 600;
+        }
+
+        .inputshow h3 {
+            color: #000;
+            font-size: 22px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .inputshow input, .inputshow select {
+            margin: 0 0 19px;
+            border-radius: .25rem;
+        }
+
+        .inputshow textarea {
+            border-radius: 3px;
+            display: block;
+            width: 100%;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+
+        label.label-class input, label.label-class span {
+            display: inline-block;
+            /* margin: 0; */
+        }
+
+        label.label-class input {
+            top: 2px;
+            position: absolute;
+        }
+
+        label.label-class {
+            position: relative;
+            margin: 0 0 13px;
+        }
+
+            label.label-class span {
+                margin: 0 28px 0;
+            }
+    </style>
+
+}
+
+<div class="container-fluid justify-content-center mainview"  style="display: none" >
+    <!-- Start Page Content -->
+
+
+
+    <div class="row" id="editsingleitem">
+        <!-- Column -->
+        <div class="col-lg-6 col-sm-12  class-ad">
+            <div class="detail-user">
+                <div class="card">
+                    <div class="card-body">
+                        <div class=" row">
+                            <div class="col-md-12">
+                                <h2 class="heading"></h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+
+
+                                <div class="cov-da">
+                                    <div class="">
+                                        @*<div class="form-group  col-md-12 col-sm-12 col-xs-12">
+                                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                            </div>*@
+
+
+
+                                        <div class=" inputshow">
+
+
+                                        </div>
+                                        <input type="hidden" name="HiddenData" id="HiddenData" value="" />
+
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group col-sm-12 col-xs-12" id="Submitdynamic">
+
+                                </div>
+                                <div class="form-group col-sm-12 col-xs-12" style="text-align: center;">
+                                    <a class="btn btn-profile btn-primary btn-flat m-b-30 m-t-30 " href="@Url.Action("Index","Template")">Back</a>
+                                    <a class="btn btn-profile btn-primary btn-flat m-b-30 m-t-30 " href="@Url.Action("EditTemplate","Template",new { tempid = Model.TemplateId })">Edit</a>
+                                </div>
+
+
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <!-- Column -->
+
+    </div>
+</div>
+
+
+@section Scripts{
+    <!-- Scripts -->
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js'></script>
+
+    <script src='https://code.jquery.com/ui/1.11.4/jquery-ui.js'></script>
+
+    <script src='https://rawgit.com/digitalBush/jquery.maskedinput/master/dist/jquery.maskedinput.min.js'></script>
+    
+
+    <script>
+         
+
+        $(document).ready(function () {
+         
+           
+            
+            var data = {
+                "TemplateId": '@Model.TemplateId',
+            }
+
+            $.ajax({
+                type: "Get",
+                url: "@Url.Action("GetViewTemplate","Template")",
+                dataType: 'json',
+                data: data,
+                success: function (data) {
+
+                    if (data == 401) {
+                        var url = "http://www.mydomain.com/new-page.html";
+                        window.location.replace('@Url.Action("InvalidAccess", "Account")');
+
+
+
+                    }
+                    else {
+                         $(".preloader").hide();
+                          $(".mainview").show();
+                    }
+
+                    var templatetype = (data.templateTypeId === 1 ? "Regular Form" : "Report Card");
+
+                    $(".heading").text(data.templateName + " (" + templatetype + ")");
+
+                    Templatedata = $.parseJSON(data.templateCode);
+
+
+                    $(Templatedata).each(function (index) {
+
+                             if (this.type == "customtitle") {
+
+                            $('.inputshow').append('<label for="usr">' + this.label + '</label>');
+                            $('.inputshow').append('<input type="text" name="' + this.name + '"   class="form-control"/>');
+
+
+
+                        }
+
+                        if (this.type == "text") {
+
+                            $('.inputshow').append('<label for="usr">' + this.label + '</label>');
+                            $('.inputshow').append('<input type="text" name="' + this.name + '"   class="form-control"/>');
+
+
+
+                        }
+
+
+                        if (this.type == "header") {
+
+                            $('.inputshow').append('<h3 for="usr">' + this.label + '</label>');
+
+                        }
+
+
+
+                        if (this.type == "radio-group") {
+
+                            $('.inputshow').append('<label for="usr">' + this.label + '</label>');
+
+                            $(this.values).each(function (index) {
+
+                                if (this.selected === true) {
+                                    $('.inputshow').append(' <label  class="label-class"> <input type="radio" name =' + this.name + '  value=' + this.value + ' checked /> <span>' + this.label + '</span></label> ');
+                                }
+
+                                else{
+                                    $('.inputshow').append(' <label  class="label-class"> <input type="radio" name =' + this.name + '  value=' + this.value + '  /> <span>' + this.label + '</span></label> ');
+                                }
+
+                            })
+
+                        }
+
+                        if (this.type == "checkbox-group") {
+                            $('.inputshow').append('<label for="usr">' + this.label + '</label>');
+
+
+                            $(this.values).each(function (index) {
+
+                                //for selectd or not logic
+
+                                if (this.selected === true) {
+                                    $('.inputshow').append(' <label class="label-class"> <input type="checkbox" name =' + this.name + '  value=' + this.value + ' checked /> <span>' + this.label + '</span></label> ');
+                                }
+                                else {
+                                    $('.inputshow').append(' <label class="label-class"> <input type="checkbox" name =' + this.name + '  value=' + this.value + ' /> <span>' + this.label + '</span></label> ');
+
+
+                                }
+
+
+                            })
+
+
+
+                        }
+
+
+                        if (this.type == "select") {
+
+                            $('.inputshow').append('<label for="usr">' + this.label + '</label>');
+                            var option = "";
+
+
+                            $(this.values).each(function (index) {
+
+                                if (this.selected === true) {
+                                    option = option + '<option value="' + this.value + '"selected>' + this.label + '</option>';
+
+                                }
+                                else {
+                                   option = option + '<option value="' + this.value + '">' + this.label + '</option>';
+                                }
+                               
+                            })
+                            $('.inputshow').append('<select name="' + this.name + '" id="' + this.id + '" class="form-control"> ' + option + '</select>');
+                        }
+
+
+
+                        if (this.type == "textarea") {
+                            $('.inputshow').append('<label for="usr">' + this.label + '</h2>');
+                            $('.inputshow').append('<textarea rows="' + this.rows + '" name="' + this.name + '"  maxlength="' + this.maxlength + '" cols="50" class=""></textarea>');
+
+                        }
+
+
+
+                        if (this.type == "date") {
+                            
+                            $('.inputshow').append('<label for="usr">' + this.label + '</h2>');
+                            $('.inputshow').append('<input type="text" name="' + this.name + '"   class="form-control datepick"  />');
+                            
+jQuery(function($) {
+    $(document).on('click', '.datepick', function () {
+        var me = $(".datepick");
+        me.datepicker({
+            showOn: 'focus',
+            altFormat: "mm/dd/yy",
+            dateFormat: "mm/dd/yy",
+            minDate: '12/12/2000',
+            maxDate: '12/12/2020'
+        }).focus();
+    }).on('focus', '.datepick', function () {
+        var me = $(".datepick");
+        me.mask('99/99/9999');
+    });
+});
+
+
+
+                        }
+
+
+                        if (this.type == "number") {
+
+
+                            $('.inputshow').append('<label for="usr">' + this.label + '</h2>');
+                            $('.inputshow').append('<input type="number" name="' + this.name + '"  min="' + this.min + '"  max="' + this.max + '" class="form-control"/>');
+
+                        }
+                        if (this.type == "file") {
+
+
+                            $('.inputshow').append('<label for="usr">' + this.label + '</h2>');
+
+                            if (this.multiple == true) {
+                                $('.inputshow').append('<input type="file" name="' + this.name + '"  multiple="' + this.multiple + '"  class="form-control"/>');
+                            }
+                            else {
+
+                                $('.inputshow').append('<input type="file" name="' + this.name + '"   class="form-control"/>');
+
+
+                            }
+
+
+
+
+                        }
+                    })
+
+
+                    $(".preloader").hide();
+                }
+
+
+            })
+
+
+
+
+
+        });
+
+
+
+    </script>
+
+}

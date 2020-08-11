@@ -1,0 +1,295 @@
+﻿@model OxyProcess.Models.GroupsViewModels.AddGroupViewModel
+@{
+    ViewData["Title"] = "Access Request";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">*@
+<style>
+
+    .error-group {
+        color: red;
+    }
+</style>
+<div class="container-fluid">
+    <!-- Start Page Content -->
+
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class=" row">
+                        <div class="col-md-12">
+                            <h2 class="heading">Access Requests</h2>
+                        </div>
+                    </div>
+                
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="hed-table">
+                                <h2 class="">List Of Requests</h2>
+                            </div>
+                            <div class="table-responsive m-t-40 group-tabel">
+                                <table id="myTable" class="table table-bordered " style="width:100% !important;">
+                                    <thead>
+                                        <tr>
+                                            <th>User Name</th>
+                                            <th>Full Name</th>
+                                            <th>Tag Number</th>
+                                            <th>Template</th>
+                                            <th>Permission</th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+
+    </div>
+
+    <!-- End PAge Content -->
+</div>
+@section Scripts{
+
+    @*<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>*@
+    @*<script src='https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js'></script>*@
+    <script src="~/js/lib/form-validation/jquery.validate.min.js"></script>
+    <script src="~/js/lib/datatables/datatables.min.js"></script>
+    <script type="text/javascript">
+
+
+
+
+
+
+
+
+
+        $(document).ready(function () {
+
+
+
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetAllRequest", "AccessRequest")",
+                "dataType": "json",
+                success: function (data) {
+                    datatableVariable = $('#myTable').DataTable({
+                         "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                        $('td', nRow).css('background-color', 'white');
+                        },
+
+                        "order": [[5, "desc"]],
+                          'columnDefs': [{
+
+
+        'targets': [2], // column index (start from 0)
+        'orderable': false, // set orderable false for selected columns
+                        }, {
+
+                                "targets": [5],
+                                "visible": false,
+                                "searchable": false
+                            },
+
+
+                        ],
+                        destroy: true,
+                        data: data,
+
+
+                        columns: [
+                            {
+                                'data': "userName",
+                                'render': function (data) {
+
+                                    return "<span class='limittext'>" + data + "</span>"
+                                }
+                            },
+
+
+                            {
+
+                                'data': "fullName",
+                                'render': function (data) {
+
+                                    return "<span class='limittext'>" + data + "</span>"
+
+                                }
+                            },
+                            {
+
+                                'data': "tag",
+                                'render': function (data) {
+
+                                    return "<span class='limittext'>" + data + "</span>"
+
+                                }
+                            },
+
+                            {
+
+                                'data': "templateName",
+                                'render': function (data) {
+
+                                    return "<span class='limittext'>" + data + "</span>"
+
+                                }
+                            },
+
+                            {
+                                'data': "accessPermission",
+                                "render": simple_checkbox
+                            },
+                             {
+                                 'data': "id",
+                            }
+                        ]
+                    });
+                }
+            });
+
+        });
+
+        var simple_checkbox = function (data, type, full, meta) {
+            debugger
+            var is_checked = data == true ? "checked" : "";
+            var id = full['id'];
+            return data == true ? '<input type="checkbox"  title="UpHold" value="' + id + '" class="checkbox disabled" checked /> <i  class="checkbox fa fa-times"  style="color:red; visibility: hidden;"/> </i>' : '<input type="checkbox" title="Approve" value="' + id + '" class="checkbox disabled" /> <i  class="checkbox fa fa-times" title="Reject" onclick="RejectRequest('+id+')"  style="color:red;"/> </i>';
+
+        }
+
+        var RejectRequest = function (RejectId) {
+
+
+            swal({
+                title: 'Are you sure?',
+                text: "you sure you want to Reject Request.!",
+                type: 'warning',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                closeOnConfirm: false,
+                closeOnCancel: false
+
+            }).then(function (dismiss) {
+                if (dismiss.dismiss === 'cancel') {
+
+                   
+                } else {
+                    $.ajax({
+                        url: '@Url.Action("RejectRequest", "AccessRequest")',
+                        dataType: 'json',
+                        type: "POST",
+                        data: { Id: RejectId },
+                        success: function (result) {
+
+
+
+                            if (result === "False") {
+                                alert("Something Worng !");
+                            }
+
+                            else {
+
+                                location.reload();
+                            }
+                        },
+                        error: function (result) {
+                            alert("Failed");
+                        }
+                    });
+                }
+
+            });
+}
+
+            $(document).on('change', '.checkbox ', function () {
+            var $this = $(this);
+            var bools = $this.is(':checked');
+            var task = "Suspend";
+            if (bools === false) {
+
+
+                task = " you sure you want to Cancel Access.!";
+            }
+            else {
+
+                task = "you sure you want to Grant Access.";
+            }
+            swal({
+                title: 'Are you sure?',
+                text: task,
+                type: 'warning',
+                showCancelButton: true,
+                 allowOutsideClick: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                closeOnConfirm: false,
+                closeOnCancel: false
+
+            }).then(function (dismiss) {
+                if (dismiss.dismiss === 'cancel') {
+
+                     var bool = $this.is(':checked');
+                    var id = $this.val();
+                    if (bool === true) {
+                        $this.prop('checked', false);
+                    }
+                    else {
+
+                        $this.prop('checked', true);
+                    }
+                } else {
+
+                    var bool = $this.is(':checked');
+                    var id = $this.val();
+
+
+
+                    $.ajax({
+                        url: '@Url.Action("ChangePermission", "AccessRequest")',
+                        dataType: 'json',
+                        type: "POST",
+                        data: { Id: id, change: bool },
+                        success: function (result) {
+
+                            
+                            if (result === "False") {
+                                alert("Something Worng !");
+                            }
+
+                            else {
+
+
+                                location.reload();
+
+                            }
+                        },
+                        error: function (result) {
+                            alert("Failed");
+                        }
+                    });
+                }
+            });
+            });
+
+
+
+
+    </script>
+
+  
+}

@@ -1,0 +1,724 @@
+﻿@model UserProfileViewModel
+@{
+    ViewData["Title"] = "UserSettings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles{
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+
+        .editable-clear-x {
+            position: absolute !important;
+        }
+
+        .editable-submit, .editable-cancel {
+            width: 50px !important;
+            margin: 0px 0px 0 8px !important;
+        }
+
+        .editable-click, a.editable-click, a.editable-click:hover {
+            text-decoration: none;
+            border-bottom: none 1px #0088cc;
+        }
+
+        .company-detail label {
+            display: block;
+        }
+
+        .company-detail span {
+            position: relative;
+            display: block;
+        }
+
+        .modal-body select {
+            height: 33px !important;
+        }
+
+
+        .autocomplete-suggestions {
+            text-align: left;
+            border: 1px solid #999;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+            background: #FFF;
+            overflow: auto;
+        }
+
+        .autocomplete-suggestion {
+            padding: 5px 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .autocomplete-selected {
+            background: #F0F0F0;
+        }
+
+        .autocomplete-suggestions strong {
+            font-weight: normal;
+            color: #3399FF;
+        }
+
+        .autocomplete-group {
+            padding: 2px 5px;
+        }
+
+            .autocomplete-group strong {
+                display: block;
+                border-bottom: 1px solid #000;
+            }
+
+        #myModal .modal-dialog {
+            position: unset;
+            margin: 7.75rem auto;
+        }
+
+        .btn-comp {
+            width: 131px !important;
+        }
+        .editable-error-block.help-block {
+    width: 100%;
+}
+    </style>
+
+}
+
+<div class="container-fluid justify-content-center">
+    <!-- Start Page Content -->
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-6  class-ad">
+            <div class="detail-user">
+                <div class="card">
+                    <div class="card-body">
+                        <div class=" row">
+                            <div class="col-md-12">
+                                <h2 class="heading">Profile</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <form>
+                                    <div class="row">
+                                        <div class="form-group  col-md-12 col-sm-12 col-xs-12">
+                                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        </div>
+                                        <div class="form-group  col-md-12 col-sm-12 col-xs-12">
+                                            <label>FirstName </label>
+                                            <span id="firstname">  <a title="" data-original-title="" class="editable editable-click" href="#" data-type="text" data-placement="right" data-title="Enter LastName">@Model.FirstName</a><span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+
+                                        </div>
+                                        <div class="form-group  col-md-12 col-sm-12 col-xs-12">
+                                            <label>LastName </label>
+                                            <span id="lastname">  <a title="" data-original-title="" class="editable editable-click" href="#" data-type="text" data-placement="right" data-title="Enter LastName">@Model.LastName</a><span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+
+                                        </div>
+                                        @if (this.User.IsInRole("Admin"))
+                                        {
+                                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+
+                                                <label>Email</label>
+                                                <a href="@Url.Action("ChangeEmailAddress", "Account")"> <span>@Model.Email<span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span></a>
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+
+                                                <label>Email</label>
+                                                <a> <span>@Model.Email<span class=""></span></span></a>
+
+                                            </div>
+                                        }
+                                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                            <label>Password</label>
+                                            <a href="@Url.Action("ResetProfilePassword","Account")">  <span>*********<span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span></a>
+                                        </div>
+                                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                            <label>Phone </label>
+                                            @*<span>@Model.Phone<span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>*@
+
+                                            <span id="Phone">  <a title="" data-original-title="" class="editable editable-click" href="#" data-type="text" data-placement="right" data-title="Enter Phone">@Model.Phone</a><span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+
+                                        </div>
+                                        @if (this.User.IsInRole("Admin"))
+                                        {
+                                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                                <a id="EditCompany" href="#company">Edit Company details</a>
+                                            </div>
+                                        }
+                                        @if (this.User.IsInRole("Customer"))
+                                        {
+                                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                                <a id="EditCompany" href="#company">Edit Address details</a>
+                                            </div>
+                                        }
+                                        <div class="form-group col-sm-12 col-xs-12" style="text-align: right;">
+                                            <a class="btn btn-profile btn-primary btn-flat m-b-30 m-t-30 " asp-action="Index" asp-controller="Home">Back</a>
+                                        </div>
+
+
+                                    </div>
+                                </form>
+
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="company-detail" style="visibility:hidden">
+                <div class="card">
+                    <div class="card-body">
+                        <div class=" row">
+                            <div class="col-md-12">
+                                <h2 class="heading">Edit Company</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <form>
+
+                                    <div class="row">
+                                        @if (this.User.IsInRole("Admin"))
+                                        {
+                                            <div class="form-group  col-md-12 col-sm-12 col-xs-12">
+                                                <label>Company Name </label>
+                                                <span id="companyName">  <a title="" data-original-title="" class="editable editable-click" href="#" data-type="text" data-placement="right" data-title="Enter CompanyName">@Model.CompanyName</a><span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+
+                                            </div>
+                                        }
+
+                                        <div class="form-group  col-md-12 col-sm-12 col-xs-12">
+                                            <label>Address1 </label>
+                                            <span id="addressLine1">  <a title="" data-original-title="" class="editable editable-click" href="#" data-type="text" data-placement="right" data-title="Enter AddressLine1">@Model.AddressLine1</a><span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+
+                                        </div>
+                                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                            <label>Address2</label>
+                                            <span id="addressLine2"> <a title="" data-original-title="" class="editable editable-click" href="#" data-type="text" data-placement="right" data-title="Enter AddressLine2">@Model.AddressLine2</a><span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+
+                                        </div>
+
+                                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                            <label>ZipCode</label>
+                                            <span id="zipCode"> <a title="" data-original-title="" class="editable editable-click" href="#" data-type="text" data-placement="right" data-title="Enter ZipCode">@Model.ZipCode</a><span class="edit-c"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+
+                                        </div>
+                                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                            <label>Country</label>
+                                            <span id="country"><a title="" data-original-title="" class="editable editable-click" href="#" data-toggle="modal" data-target="#myModal" data-type="text" data-placement="right">@Model.CountryName</a><span class="edit-c" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+
+                                        </div>
+
+                                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                            <label>State</label>
+                                            <input asp-for="StateId" type="hidden" id="hiddenStateId">
+
+                                            <span id="state"><a title="" data-original-title="" class="editable editable-click" href="#" data-toggle="modal" data-target="#myModal" data-type="text" data-placement="right">@Model.StateName</a><span class="edit-c" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+                                        </div>
+
+                                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                            <label>City</label>
+                                            <span id="city"><a title="" data-original-title="" class="editable editable-click" href="#" data-toggle="modal" data-target="#myModal" data-type="text" data-placement="right">@Model.City</a><span class="edit-c" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil" aria-hidden="true"></i></span></span>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-xs-12" style="text-align: right;">
+                                            <a class="btn btn-comp btn-profile btn-primary btn-flat m-b-30 m-t-30 " asp-action="Index" asp-controller="UserSetting">Back</a>
+                                        </div>
+
+
+                                    </div>
+                                </form>
+
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Column -->
+
+    </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Country State City</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                    <input asp-for="CountryId" type="hidden" id="hiddenCountryId">
+                    <label>Country</label>
+                    <select asp-for="CountryId"
+                            class="form-control cst"
+                            asp-items="@(new SelectList(@ViewBag.ListofCountry,"CountryId", "CountryName"))"></select>
+                    <span asp-validation-for="CountryId" id="errorcountry" class="text-danger"></span>
+
+                </div>
+                <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                    <label>State</label>
+                    <select asp-for="StateId"
+                            class="form-control cst"
+                            asp-items="@(new SelectList(@ViewBag.ListofState,"StateId", "StateName"))"></select>
+                    <span asp-validation-for="StateId" id="errorState" class="text-danger"></span>
+                    <span id="errorState" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                    <label>City</label>
+                    <input asp-for="City" type="text" class="form-control" placeholder="City Name">
+                    <span asp-validation-for="City" id="errorCity" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="updateCST">Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <!-- Scripts -->
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js'></script>
+
+    <script src="~/js/JqueryUI_1_11_2.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+
+
+            $('#state,#country,#city').on("click", function () {
+
+                $('#StateId').val('@Model.StateId');
+            });
+
+
+            if ($(location).attr('hash') == "#company") {
+
+                $('.company-detail').css({ "visibility": "visible" });
+                $(".detail-user").hide();
+            }
+            else {
+                $(".detail-user").show();
+            }
+            $(window).on('popstate', function (event) {
+                   if ($(location).attr('hash') == "#company") {
+                       window.location.href.split('#')[0]
+                       location.reload();
+                   } else {
+                       $(".detail-user").show();
+                       $('.company-detail').hide()
+                   }
+                    $(".detail-user").show();
+                    $('.company-detail').hide();
+            });
+            /* DEMO SCRIPTS */
+            $.fn.editable.defaults.mode = 'inline';
+            $('#EditCompany').click(function ()
+            {
+                 $('.company-detail').css({ "visibility": "visible" });
+                 $(".detail-user").hide();
+            });
+
+            $('#firstname').editable({
+                 validate: function (value) {
+                    if (value === null || value === '') {
+                        return 'Empty values not allowed';
+                       }
+
+                       if (value.length > 30) {
+                        return 'First Name is too Long.';
+                       }
+                },
+                url: function (collection) {
+
+                    return $.ajax({
+                        url: '@Url.Action("EditUserProfile", "UserSetting")',
+                        type: "POST",
+
+                        data: { "collection": collection },
+                        dataType: 'json',
+
+                        success: function (response) {
+                            location.reload(true);
+                        },
+                        error: function () {
+                            alert("Error in Ajax");
+                        }
+                    });
+                }
+            });
+
+            $('#lastname').editable({
+                 validate: function (value) {
+                    if (value === null || value === '') {
+                        return 'Empty values not allowed';
+                       }
+
+                       if (value.length > 30) {
+                        return 'Last Name is too Long.';
+                       }
+                },
+                 url: function (collection) {
+                    return $.ajax({
+                        url: '@Url.Action("EditUserProfile", "UserSetting")',
+                        type: "POST",
+
+                        data: { "collection": collection },
+                        dataType: 'json',
+
+                        success: function (response) {
+                            location.reload(true);
+                        },
+                        error: function () {
+                            alert("Error in Ajax");
+                        }
+                    });
+                },
+
+            });
+
+            $('#Phone').editable({
+                validate: function (value) {
+                    if (value === null || value === '') {
+                        return 'Empty values not allowed.';
+                    }
+
+
+
+                     if (!value.match(/^[0-9]{1,10}$/)) {
+      return "Only 10 number are allowed.";
+    }
+                },
+                 url: function (collection) {
+                    return $.ajax({
+                        url: '@Url.Action("EditUserProfile", "UserSetting")',
+                        type: "POST",
+
+                        data: { "collection": collection },
+                        dataType: 'json',
+
+                        success: function (response) {
+                            location.reload(true);
+                        },
+                        error: function () {
+                            alert("Error in Ajax");
+                        }
+                    });
+                },
+
+            });
+
+               $('#companyName').editable({
+                validate: function (value) {
+                    if (value === null || value === '') {
+                        return 'Empty values not allowed';
+                       }
+
+                       if (value.length > 20) {
+                        return 'Company name is too Long.';
+                       }
+                },
+
+                   url: function (collection) {
+                       return $.ajax({
+                        url: '@Url.Action("EditUserProfile", "UserSetting")',
+                        type: "POST",
+                        data: { "collection": collection },
+                        dataType: 'json',
+                           success: function (response) {
+                               location.reload();
+                        },
+                        error: function () {
+                            alert("Error in Ajax");
+                        }
+                    });
+                }
+            });
+
+            $('#addressLine1').editable({
+                validate: function (value) {
+                    if (value === null || value === '') {
+                        return 'Empty values not allowed';
+                    }
+                },
+                    url: function (collection) {
+
+                    return $.ajax({
+                        url: '@Url.Action("EditUserProfile", "UserSetting")',
+                        type: "POST",
+
+                        data: { "collection": collection },
+                        dataType: 'json',
+
+                        success: function (response) {
+                            location.reload();
+                        },
+                        error: function () {
+                            alert("Error in Ajax");
+                        }
+                    });
+                }
+            });
+
+            $('#addressLine2').editable({
+                validate: function (value) {
+                    if (value === null || value === '') {
+                        return 'Empty values not allowed';
+                    }
+                },
+                    url: function (collection) {
+
+                    return $.ajax({
+                        url: '@Url.Action("EditUserProfile", "UserSetting")',
+                        type: "POST",
+
+                        data: { "collection": collection },
+                        dataType: 'json',
+
+                        success: function (response) {
+                            location.reload();
+                        },
+                        error: function () {
+                            alert("Error in Ajax");
+                        }
+                    });
+                }
+            });
+
+
+            $('#zipCode').editable({
+                validate: function (value) {
+                    if (value === null || value === '') {
+                        return 'Empty values not allowed';
+                    }
+                      if (!value.match(/^[0-9]{1,10}$/)) {
+      return "Enter valid Zip Code.";
+    }
+                },
+                    url: function (collection) {
+
+                    return $.ajax({
+                        url: '@Url.Action("EditUserProfile", "UserSetting")',
+                        type: "POST",
+                        data: { "collection": collection },
+                        dataType: 'json',
+                        success: function (response) {
+                            location.reload();
+                        },
+                        error: function () {
+                            alert("Error in Ajax");
+                        }
+                    });
+                }
+            });
+
+
+
+
+
+
+
+
+
+
+
+            $('#CountryId').change(function () {
+                
+                var CountryId = parseInt($(this).val());
+                    if (!isNaN(CountryId)) {
+                        var ddlState = $('#StateId');
+                        var ddlCity = $('#CityId');
+                        ddlState.empty();
+                        ddlCity.empty();
+                        ddlState.append($("<option></option>").val('').html('Please wait ...'));
+                        ddlCity.append($("<option></option>").val('').html('Please wait ...'));
+                    $.ajax({
+                        url: '@Url.Action("GetStateList","Address")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { CountryId: CountryId },
+                        success: function (d) {
+                            ddlState.empty(); // Clear the please wait
+                            ddlState.append($("<option></option>").val('').html('Select State'));
+                            ddlCity.empty(); // Clear the please wait
+                            ddlCity.append($("<option></option>").val('').html('Select City'));
+                            $.each(d, function (i, states) {
+                                ddlState.append($("<option></option>").val(states.stateId).html(states.stateName));
+                            });
+                        },
+                        error: function () {
+                            alert('Error!');
+                        }
+                    });
+                }
+            });
+
+
+            //City Bind By state id
+            $("#StateId").change(function () {
+                var StateId = parseInt($(this).val());
+                    if (!isNaN(StateId)) {
+                        var ddlCity = $('#CityId');
+                    ddlCity.append($("<option></option>").val('').html('Please wait ...'));
+                    $.ajax({
+                        url: '@Url.Action("GetCityList","Address")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { stateId: StateId },
+                        success: function (d) {
+                            ddlCity.empty(); // Clear the plese wait
+                            ddlCity.append($("<option></option>").val('').html('Select City'));
+                            $.each(d, function (i, cities) {
+                                ddlCity.append($("<option></option>").val(cities.cityId).html(cities.cityName));
+                            });
+                        },
+                        error: function () {
+                            ddlState.empty(); // Clear the please wait
+                            ddlState.append($("<option></option>").val('').html('Select State'));
+                        }
+                    });
+                }
+
+            });
+
+            $('#updateCST').on("click", function () {
+
+
+
+                //if (AddressValidate() == null) {
+
+
+                //    return false;
+
+                //}
+
+
+
+                
+                if (isselectall()) {
+                    var cst = new Object();
+                    cst.CountryId = ($("select#CountryId").val() !== "") ? $("select#CountryId").val() : 0
+                    cst.StateId = ($("select#StateId").val() !== "") ? $("select#StateId").val() : 0
+                    cst.City = $("#City").val();
+                    $.ajax({
+                        url: '@Url.Action("updateCST", "UserSetting")',
+                        type: "POST",
+                        data: cst,
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.success == true) {
+                                if (response.cscUpdate == true) {
+                                    swal({
+                                        text: response.message,
+                                        type: 'success',
+                                        confirmButtonText: 'Ok',
+                                    }).then(function () {
+                                        location.reload(true);
+                                        });
+                                    $("#myModal").modal('hide');
+                                }
+                                if (response.sscRequired == true) {
+                                    swal({
+                                        text: response.message,
+                                        type: 'error',
+                                        confirmButtonText: 'Ok',
+                                    }).then(function () {
+                                        location.reload(true);
+                                        });
+                                    $("#myModal").modal('hide');
+
+                                }
+
+                            } else {
+                                swal({
+                                    text: response.message,
+                                    type: 'error',
+                                    confirmButtonText: 'Ok',
+                                }).then(function () {
+                                    location.reload(true);
+                                });
+                            }
+                        },
+                        error: function () {
+                            alert("Error in Ajax");
+                        }
+                    });
+
+                }
+
+
+
+
+            });
+
+
+
+        });
+
+        function isselectall() {
+            if ($("select#CountryId").val() != "" && $("select#StateId").val() != "" && $("select#CityId").val() != ""  ) {
+                return true
+            }
+            else {
+                return false
+            }
+        }
+
+
+        $('#errorState').html('');
+        $('#errorCity').html('');
+
+        function isselectall() {
+            var count = 0;
+            $('#errorState').html('');
+            $('#errorCity').html('');
+            $('#MemberName-error').html('');
+            if ($("select#StateId").val() === "") {
+                $('#errorState').html('Please select state');
+                count = count + 1;
+
+            }
+            if ($("#City").val().trim().length === 0) {
+                $('#errorCity').html('Please select city');
+                count = count + 1;
+
+            }
+
+            if (count === 0) {
+                return true;
+            } else {
+                $("#myModal").modal('show');
+                return false;
+            }
+        }
+
+
+
+    </script>
+}

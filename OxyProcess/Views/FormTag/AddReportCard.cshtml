@@ -1,0 +1,622 @@
+﻿@model OxyProcess.Models.FormTag.Tag
+@{
+    ViewData["Title"] = "Manage Tag";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles{
+
+    <link href="~/css/lib/jquery-sortable/Short-application.css" rel="stylesheet" />
+
+}
+
+
+<style>
+    .nav-cus span {
+        min-width: 139px;
+        border: 1px solid #eee;
+        background: #eee;
+        color: #aaa;
+        margin: 0 19px 0 0;
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: .25rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+    nav-cus span.active {
+        background-color: #0062cc !IMPORTANT;
+    }
+
+    .nav-cus span.active {
+        color: #fff;
+        background-color: #0062cc !important;
+        border-color: #005cbf !important;
+    }
+
+    .nav-cus i {
+        padding: 0 10px 0 0px;
+        color: #eee;
+    }
+
+    .add-colm {
+        padding-top: 25px;
+    }
+
+    .group-tabel {
+        margin: 30px 0 0 !important;
+    }
+
+    #myTable_wrapper {
+        width: 653px;
+    }
+    /**/
+    .container-view {
+        max-width: 1100px;
+        margin: 39px auto;
+    }
+
+    .top-view, .bottom-view, .right-view {
+        padding: 20px;
+        border: 1px solid #ccc;
+        overflow-y: scroll;
+        width: 100%;
+    }
+
+    .top-view {
+        margin: 0 0 18px;
+    }
+
+    .top-view, .bottom-view {
+        /* overflow-y: scroll; */
+        min-height: 305px;
+    }
+
+    .right-view {
+        min-height:500px;
+        overflow: auto;
+    }
+
+    .top-view {
+          min-height:500px;
+    height: 100%;
+}
+    .room-remove {
+        float: right;
+        margin-top: 2px;
+    }
+
+    .nested_with_switch .room-remove {
+        display: none;
+    }
+
+    .nested_with_switch2 .room-remove {
+        display: none;
+    }
+
+    .nested_with_switch .editdata {
+        display: none;
+    }
+
+    .nested_with_switch2 .editdata {
+        display: none;
+    }
+
+    .publictemp {
+        background-color: #eee !important;
+    }
+
+    .body.dragging:hover, body.dragging *:hover {
+        cursor: default !important;
+    }
+
+    .nested_with_switch li:hover {
+        cursor: move !important;
+    }
+
+    .btn-group {
+        height: 28px !important;
+    }
+
+    .right-view {
+        margin: 25px 0 0;
+    }
+
+
+
+    .room_number {
+        background-color: #fde7ce !important;
+    }
+
+    ol.vertical li {
+        cursor: move;
+    }
+
+    .fa-pencil {
+        margin: 0px 10px 0px;
+        cursor: pointer;
+        font-size: 17px;
+      color: #8c8a8a;
+    }
+
+
+
+    .fa-times{
+        font-size: 19px;
+    }
+
+
+    .cferror {
+    border-color:red !important;
+}
+
+    .full-view {
+    height: 100%;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.right-view {
+    height: 100%;
+}
+
+.right-view {
+    border: 2px dashed#ccc;
+}
+.right-view:after {
+    content: attr(data-content);
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    margin-top: -1em;
+}
+
+.top-view:after {
+    content: attr(data-content);
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    margin-top: -1em;
+}
+
+
+.ad-btns .btn {
+    padding: 8px 45px;
+    margin: 19px 4px 0;
+}
+
+
+</style>
+<div class="container-fluid">
+    <!-- Start Page Content -->
+
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="container-view">
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h3>ReportCards Forms</h3>
+                                        <div class="full-view">
+                                            <div class="top-view" data-content="No form template exists">
+                                                <ol class='nested_with_switch nested test1 vertical'></ol>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="full-view">
+                                            <div class="right-view" data-content="Drag a form from the left to this area">
+                                                <ol class='nested_with_switch_room nested test3 vertical' id="room_list">
+                                                    @*
+                                <li data-id="2" data-name='Deluxe Room' class="room_number msg1" id="room_remove11">
+                                    Deluxe Room<div class="room-remove"><a href="javascript:void(0)" onclick="delete_room(11)"><i class="fa fa-times"></i></a></div>
+                                    <ol>
+                                        <li id="passenger_remove21">
+                                            John Terry<div class="room-remove"><a href="javascript:void(0)" onclick="delete_template(21)"><i class="fa fa-times"></i></a></div>
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li data-id="3" data-name='Family Room' class="room_number msg1" id="room_remove12">
+                                    Family Room<div class="room-remove"><a href="javascript:void(0)" onclick="delete_room(12)"><i class="fa fa-times"></i></a></div>
+                                    <ol>
+                                        <li id="passenger_remove22">
+                                            Jose Mourinho<div class="room-remove"><a href="javascript:void(0)" onclick="delete_template(22)"><i class="fa fa-times"></i></a></div>
+                                        </li>
+                                    </ol>
+                                </li>*@
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ad-btns">
+                                <button class="pull-right  btn btn-primary" type="button" id="submit">Save</button>
+                                <button class="pull-right btn btn-primary" onclick="window.location.replace('@Url.Action("Index","FormTag")');" type="button">Back</button>
+                            </div>
+                          
+                        </div>
+                    </div>
+                    @*<div class="row">
+                            <button class="btn btn-primary" type="submit">Next</button>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+
+    </div>
+
+    <!-- End PAge Content -->
+</div>
+@section Scripts{
+
+    <script type="text/javascript" src="~/js/lib/jquery-sortable/jquery-sortable.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+             var msg = '@ViewBag.Msg';
+            if (msg != null && msg!="") {
+                  swal({
+                   text: '@ViewBag.Msg',
+                   type: 'warning',
+                   confirmButtonText: 'Ok',
+                });
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetAllPublicReportCards", "FormTag")",
+                "dataType": "json",
+                success: function (data) {
+
+                    if (data.length != 0) {
+
+                          $(".top-view").removeAttr("data-content");
+                    }
+                    $(data).each(function (index) {
+
+                        var idname =this.TemplateId;
+
+                           var delete_id = Math.floor(Math.random() * 90000) + 10000;
+                                    var deleteRegulertemp = "delete_Reguler_template(" + delete_id + ")";
+
+
+
+                        if (this.Groups === "0") {
+                            $('ol.test1').append('<li  data-uniqId=""  delete_id="' + delete_id + '" id="' + idname + '" data-type="template"  data-temptype="'+this.TemplateTypeId+'" data-id="' + this.TemplateId + '"data-Group="' + this.Groups + '" class="publictemp" data-secondname="' + this.TemplateName + '" data-name="' + this.TemplateName + '"><span class="innertextval" >' + this.TemplateName + '</span>  <div class="room-remove"><a href="javascript:void(0)" onclick="'+deleteRegulertemp+'"><i class="fa fa-times"></i></a></div></li>');
+
+
+                        }
+                        else {
+                            $('ol.test1').append('<li  data-uniqId=""   delete_id="' + delete_id + '" id="'+idname+'" data-type="template"  data-Group="' + this.Groups + '" data-temptype="'+this.TemplateTypeId+'"  data-id="' + this.TemplateId + '" data-secondname="' + this.TemplateName + '" data-name="' + this.TemplateName + '"><span class="innertextval" >' + this.TemplateName + '</span> <div class="room-remove"><a href="javascript:void(0)" onclick="'+deleteRegulertemp+'"><i class="fa fa-times"></i></a></div></li>');
+
+                        }
+});
+
+                }
+            });
+
+
+
+        });
+
+        $(document).ready(function () {
+
+            var oldContainer;
+            var group = $("ol.nested_with_switch").sortable({
+                drop: false,
+                group: 'nested',
+
+                 onDragStart: function ($item, container, _super) {
+    // Duplicate items of the no drop area
+
+
+                 if(!container.options.drop)
+                 $item.clone().insertAfter($item);
+                 _super($item, container);
+                  },
+
+
+                onDrop: function ($item, container, _super) {
+          // $(".fa-pencil").attr("title", "Change Name");
+          //$(".fa fa-times").attr("title","Remove Template");
+
+                    //Reset Border To normal
+                    $(".right-view").css("border", "2px solid#ccc");
+                    //Remove Attr
+                    $(".right-view").removeAttr("data-content");
+
+
+
+                    var itemtype = $item.attr("data-temptype");
+                    var data_class = $item.attr("Class");
+                    var data_id = $item.attr("data-id");
+                    var countli = $('.nested_with_switch_room  li').length;
+                    var data_name = $item.attr("data-name");
+
+                    var delete_id = Math.floor(Math.random() * 90000) + 10000;
+                    var deleteRegulertemp = "delete_Reguler_template(" + delete_id + ")";
+                    //var deletetemp = "delete_template(" + data_id + ")";
+                    var delete_id_pass = $item.attr("delete_id");
+                    var TemplateFormGroupId = Math.floor(Math.random() * 9000000) + 1000000;
+
+
+                    if ($item[0].attributes["data-Type"].value !== "Group") {
+
+                        $item[0].setAttribute("delete_id", delete_id)
+                        $item[0].children[1].children[0].setAttribute("onclick", deleteRegulertemp)
+
+                    }
+
+
+                    if ($item[0].attributes["data-uniqId"].value == "") {
+
+                        $item[0].setAttribute("data-uniqId", TemplateFormGroupId)
+
+                    }
+                    if (countli === 1) {
+
+
+
+
+                              container.el.removeClass("active");
+
+
+                            _super($item, container);
+
+                    }
+                    else {
+
+                        if (itemtype === "2") {
+
+                            var tempid = data_id;
+
+                            var countli =  $('ol.test3  li[id =' + tempid + ']').length;
+
+
+                            if (countli > 1) {
+
+                                swal("Selected form already exists on the tag.");
+                            $("#myParagraph").css({ "backgroundColor": "black", "color": "white" });
+                                $item.remove();
+                            }
+
+
+
+                        }
+                        container.el.removeClass("active");
+                        _super($item, container);
+                    }
+
+
+
+                },
+
+                isValidTarget: function ($item, container) {
+
+                    return !(container.el.parent('li').hasClass('room_number') && $item.hasClass('room_number'));
+},
+
+            });
+
+
+            var groups = $("ol.nested_with_switch_room").sortable({
+                group: 'nested',
+
+                // Duplicate items of the no drop area
+                handle: 'i.icon-move',
+
+            });
+
+
+        });
+
+
+
+
+        $(document).on('click', '.editdata', function () {
+            //$(this).data("name", "dsads");
+            
+            
+            var d = $(this).parent();
+
+            swal({
+                title: 'Enter Template Name',
+                input: 'text',
+                showCancelButton: true,
+                
+                allowOutsideClick: false,
+               
+            }).then(function (dismiss) {
+
+
+                if (dismiss.dismiss === 'cancel') {
+                    $(".swal2-input").removeClass("cferror");
+                } else {
+
+                    if (dismiss.value == "") {
+
+                        $(".editdata").click();
+                        $(".swal2-input").addClass("cferror");
+                        $(".cferror").after('<lable style="text-align: initial;color:red">Template name is required.</lable>');
+                    }
+                    else {
+                        $(".swal2-input").removeClass("cferror");
+                        d.data("secondname", dismiss.value);
+                        var TemplateId = d.attr("data-id");
+                        var deletetemp = "delete_template(" + TemplateId + ")";
+                        var deletetemp = "delete_template(" + TemplateId + ")";
+                        var temptype = d.attr("data-temptype");
+                        var data_class = d.attr("Class");
+                        var data_name = d.attr("data-name");
+                        var data_text = d.text();
+                        var idname = TemplateId;
+                        //$(".innertextval", d).text(dismiss.value + "(" + data_name + ")");
+                          $(".innertextval", d).text(dismiss.value);
+                    }
+                }
+            });
+        });
+
+       
+
+          function delete_Reguler_template(id) {
+            swal({
+                title: 'Are you sure?',
+                text: 'Do you want to remove this template.',
+                type: 'warning',
+                showCancelButton: true,
+                animation: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete it!',
+              
+                
+                allowOutsideClick: false,
+
+
+            }).then(function (dismiss) {
+
+                if (dismiss.dismiss === 'cancel') {
+
+                } else {
+
+                    $('ol.test3').find('li[delete_id = ' + id + ']').remove();
+
+                    var licount = $('ol.test3').find("li").length;
+
+                    if (licount <= 0) {
+                        //Reset Border To normal
+                        $(".right-view").css("border", "2px dashed#ccc");
+                        //Remove Attr
+                        $(".right-view").attr("data-content", "Drag a form from the left to this area");
+                    }
+                }
+            });
+        }
+
+
+
+        //Save or Submit Tag data
+          $(document).on('click', '#submit', function () {
+
+            
+          var data2 = $("ol.nested_with_switch_room").sortable("serialize").get();
+          var jsonString = JSON.stringify(data2, null, ' ');
+
+            if (data2[0].length == 0) {
+
+
+                   swal("Tag should not be empty.");
+            }
+                //
+            var firstli = data2[0][0];
+
+            if (firstli.group !== 0 || firstli.temptype !== 2) {
+                swal("Please add one public ReportCard in first!");
+                return false;
+            }
+
+
+            var dataToSend = {
+                           
+                'TagCode': jsonString,
+                'TagNumber':guid()
+                        };
+                        $.ajax({
+                            url: '@Url.Action("CreateEditTagForm", "FormTag")',
+                            dataType: 'json',
+                            type: "POST",
+                            data: dataToSend,
+                            success: function (result) {
+                                if (result.returnType === "Success") {
+
+                                    swal({
+                                        title: "Success",
+                                        text: "Tag has been successfully Created.",
+                                        type: "success",
+                                        showCancelButton: false,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                    }).then(function () {
+                                     
+                                     var url = "/FormTag/SearchTag?SearchTag="+result.data;
+                                     
+                                        
+                                     
+                                   
+
+                                        window.location.replace(url);
+
+                                    });
+                                }
+                                else {
+
+                                    swal("SomeThing Wrong!","", "warning");
+
+                                }
+
+
+                            },
+                            error: function (result) {
+                                  swal("SomeThing Wrong!","", "warning");
+                            }
+                        });
+
+          })
+
+
+
+         //genrate guid
+
+        function guid() {
+          function s4() {
+          return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1).toUpperCase();
+          }
+   function s2() {
+
+          var length=2;
+          var text = "";
+          var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          for (var i = 0; i < length; i++)
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+          return text;
+          }
+          return s2() + '-' + s4() + '-' + s4() + '-' + s4()
+          }
+
+    </script>
+}
+
+
+
+
